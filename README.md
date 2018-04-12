@@ -14,5 +14,4 @@ After cloning the project, you will need to follow these steps to install the de
 # Requirements
 
 * Visual Studio 2015
-* SFML 2.4.2 installed
 
