@@ -4,6 +4,8 @@
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+	window.setFramerateLimit(60);
+
 	sf::CircleShape shape(10);
 	shape.setFillColor(sf::Color::Red);
 	float i = 0;
@@ -20,8 +22,8 @@ int main()
 			cos(i) * 100 + 100,
 			sin(i) * 100 + 100
 		);
-		i += 0.001;
-
+		i += 0.025;
+		
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::TextEntered) {
