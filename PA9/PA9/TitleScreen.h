@@ -29,16 +29,17 @@ public:
 		m_MenuOptions[2].setPosition(10, 100);
 	}
 
+	/*
+	Handle the arrow keys + return
+	*/
 	void handleEvents(sf::Event e, sf::RenderWindow &window, GameState &state) {
 		if (e.type == sf::Event::KeyReleased) {
 			switch (e.key.code) {
 				case sf::Keyboard::Up: {
-					if (m_SelectedMenuOption > 0) {
+					if (m_SelectedMenuOption > 0)
 						m_SelectedMenuOption--;
-					}
-					else {
+					else
 						m_SelectedMenuOption = MENU_SIZE - 1;
-					}
 
 					break;
 				}
@@ -54,11 +55,14 @@ public:
 					switch (m_SelectedMenuOption) {
 						case MENU_OPTION_PLAY:
 							// TODO
+							// state.setCurrentScreen(new GameScreen());
 							break;
 						case MENU_OPTION_ABOUT:
+							// update the screen to be a new instance of the AboutScreen
 							state.setCurrentScreen(new AboutScreen());
 							break;
 						case MENU_OPTION_EXIT:
+							// just exit out for this option
 							window.close();
 							break;
 					}
@@ -68,18 +72,22 @@ public:
 		}
 	}
 
-
+	/*
+	Draws the text onto the window
+	*/
 	void draw(sf::RenderWindow &window, GameState &currentState) {
 		window.draw(this->m_TitleText);
 
+		// iterate through the whole menu array
 		for (int i = 0; i < MENU_SIZE; i++) {
 			sf::Text &menuOption = this->m_MenuOptions[i];
-			if (i == this->m_SelectedMenuOption) {
+
+			// highlight the selected option...
+			if (i == this->m_SelectedMenuOption)
 				menuOption.setColor(sf::Color::Red);
-			}
-			else {
+			else
 				menuOption.setColor(sf::Color::White);
-			}
+
 			window.draw(this->m_MenuOptions[i]);
 		}
 	}
