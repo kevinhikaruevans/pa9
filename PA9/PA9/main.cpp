@@ -1,40 +1,33 @@
 #include <SFML/Graphics.hpp>
-#include <iostream>
-#include <cmath>
+#include "State.h"
+#include "BaseScreen.h"
+
+#include "TitleScreen.h"
+
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-	window.setFramerateLimit(60);
+	sf::RenderWindow window(sf::VideoMode(800, 600), "PA9");
+	GameState state;
 
-	sf::CircleShape shape(10);
-	shape.setFillColor(sf::Color::Red);
-	float i = 0;
+	window.setFramerateLimit(60);
+	state.setCurrentScreen(new TitleScreen());
+	
 	while (window.isOpen())
 	{
 		sf::Event event;
-		sf::Color c(
-			(int)(cos(i * 10) * 100 + 155),
-			0,
-			0
-		);
-		shape.setFillColor(c);
-		shape.setPosition(
-			cos(i) * 100 + 100,
-			sin(i) * 100 + 100
-		);
-		i += 0.025;
-		
+
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::TextEntered) {
-				std::cout << (char)event.text.unicode << std::endl;
-			}
 			if (event.type == sf::Event::Closed)
 				window.close();
+
+			state.getCurrentScreen()->handleEvents(event, window, state);
 		}
 
 		window.clear();
-		window.draw(shape);
+		
+		state.getCurrentScreen()->draw(window, state);
+		
 		window.display();
 	}
 
