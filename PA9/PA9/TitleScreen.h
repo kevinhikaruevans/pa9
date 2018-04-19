@@ -17,7 +17,7 @@ public:
 		: BaseScreen("Title Screen")
 	{
 		m_Font.loadFromFile("OpenSans-Regular.ttf");
-
+		m_SelectedMenuOption = 0;
 		m_TitleText = sf::Text("PA9", this->m_Font, 40U);
 
 		m_MenuOptions[0] = sf::Text("Play", this->m_Font, 30U);
@@ -84,9 +84,9 @@ public:
 
 			// highlight the selected option...
 			if (i == this->m_SelectedMenuOption)
-				menuOption.setColor(sf::Color::Red);
+				menuOption.setFillColor(sf::Color::Red);
 			else
-				menuOption.setColor(sf::Color::White);
+				menuOption.setFillColor(sf::Color::White);
 
 			window.draw(this->m_MenuOptions[i]);
 		}
