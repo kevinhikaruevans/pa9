@@ -6,7 +6,7 @@ class GameScreen
 	: public BaseScreen
 {
 public:
-	GameScreen(sf::Event e)
+	GameScreen()
 		: BaseScreen("Game Screen")
 	{
 
