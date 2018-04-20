@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="AboutScreen.h" />
     <ClInclude Include="BaseScreen.h" />
+    <ClInclude Include="GameScreen.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="TitleScreen.h" />
   </ItemGroup>

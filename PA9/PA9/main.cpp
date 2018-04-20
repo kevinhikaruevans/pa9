@@ -11,7 +11,7 @@ int main()
 
 	window.setFramerateLimit(60);
 	state.setCurrentScreen(new TitleScreen());
-	
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -25,9 +25,9 @@ int main()
 		}
 
 		window.clear();
-		
+
 		state.getCurrentScreen()->draw(window, state);
-		
+
 		window.display();
 	}
 
