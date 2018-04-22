@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include "Animation.h"
 
+#define MAX_HEALTH 100
+
 
 class Character
 {
@@ -24,6 +26,7 @@ public:
 	{		
 		sprite.setTextureRect({ 0, 0, 20, 24 });
 		sprite.setScale(2, 2);
+		mHealth = MAX_HEALTH;
 		animations[int(AnimationIndex::WalkingUp)] = Animation(20, 0, 20, 24, "spritesheet.png", 0);
 		animations[int(AnimationIndex::WalkingDown)] = Animation(20, 48, 20, 24, "spritesheet.png", 0);
 		animations[int(AnimationIndex::WalkingLeft)] = Animation(20, 24, 20, 24, "spritesheet.png", 0);
@@ -71,6 +74,20 @@ public:
 	{
 		return this->position;
 	}
+
+	int getHealth()
+	{
+		return this->mHealth;
+	}
+
+	void setHealth(int newHealth)
+	{
+		this->mHealth += newHealth;
+		if (this->mHealth > MAX_HEALTH)
+		{
+			mHealth = MAX_HEALTH;
+		}
+	}
 		
 protected:
 	static constexpr float speed = 100.0f;
@@ -79,4 +96,7 @@ protected:
 	sf::Sprite sprite;
 	Animation animations[int(AnimationIndex::Count)];
 	AnimationIndex curAnimation = AnimationIndex::WalkingDown;
+
+private:
+	int mHealth;
 };
