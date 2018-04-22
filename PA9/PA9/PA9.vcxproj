@@ -152,10 +152,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AboutScreen.h" />
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="BaseScreen.h" />
+    <ClInclude Include="Character.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="TitleScreen.h" />
+    <ClInclude Include="Zombie.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="OpenSans-Regular.ttf" />
