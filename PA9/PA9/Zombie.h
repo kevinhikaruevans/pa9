@@ -36,6 +36,12 @@ public:
 	void setDirection(const sf::Vector2f &dir)
 	{
 		
+		if (dir.x == 0 || dir.y == 0) //prevent crash of zombie object if on the same position - might need some tweaking
+		{
+			curAnimation = AnimationIndex::WalkingDown;
+			return;
+		}
+
 		float temp = (float)sqrt(dir.x * dir.x + dir.y * dir.y);
 		sf::Vector2f normalized = { dir.x, dir.y };
 		normalized = normalized / temp;
@@ -43,19 +49,19 @@ public:
 
 		velocity =  normalized * speed * 50.0f / 100.0f;
 
-		if (dir.x > 0.0f)
+		if (dir.x > 0.0f && abs(dir.x) > abs(dir.y)) //if x is positive and the x component is > y component - face right
 		{
 			curAnimation = AnimationIndex::WalkingRight;
 		}
-		else if (dir.x < 0.0f)
+		else if (dir.x < 0.0f && abs(dir.x) > abs(dir.y)) //if x is negative and x > y face left
 		{
 			curAnimation = AnimationIndex::WalkingLeft;
 		}
-		else if (dir.y < 0.0f)
+		else if (dir.y < 0.0f && abs(dir.y) > abs(dir.x)) //if y is negative and y > x face up
 		{
 			curAnimation = AnimationIndex::WalkingUp;
 		}
-		else if (dir.y > 0.0f)
+		else if (dir.y > 0.0f && abs(dir.y) > abs(dir.x)) //if y is positive and y > x face down
 		{
 			curAnimation = AnimationIndex::WalkingDown;
 		}
