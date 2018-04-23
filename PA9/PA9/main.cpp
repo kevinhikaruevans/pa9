@@ -7,6 +7,7 @@
 #include "TitleScreen.h"
 #include "Character.h"
 #include "Zombie.h"
+#include "Cursor.h"
 
 
 //int main()
@@ -45,8 +46,16 @@ int main()
 {
 	// Create the main window
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
+	Cursor newCursor(window);
 
 	Character player({ 100.0f, 100.0f });
+
+	Character *zombieArray[25];
+	for (int i = 0; i < 25; ++i)
+	{
+		zombieArray[i] = new Zombie();
+	}
+
 
 	Zombie *enemy = new Zombie();
 
@@ -96,19 +105,28 @@ int main()
 		player.update(dt);
 		
 		sf::Vector2f direction = { 0.0f, 0.0f };
-		direction = (player.getPosition() - enemy->getPosition());
+		//direction = (player.getPosition() - enemy->getPosition());
 
 
-		enemy->setDirection(direction); //need different way to move towards character - position vector - get x,y?
-		enemy->update(dt);
+		//enemy->setDirection(direction); //need different way to move towards character - position vector - get x,y?
+		//enemy->update(dt);
 		
 
 		// Clear screen
 		window.clear();
 		// Draw the sprite
+		for (int i = 0; i < 25; ++i)
+		{
+			direction = (player.getPosition() - zombieArray[i]->getPosition());
+			
+			zombieArray[i]->setDirection(direction);
+			zombieArray[i]->update(dt);
+			zombieArray[i]->draw(window);
+		}
 		player.draw(window);	
-		enemy->draw(window);
+		//enemy->draw(window);
 		// Update the window
+		newCursor.setPosition(window);
 		window.display();
 	}
 	return EXIT_SUCCESS;

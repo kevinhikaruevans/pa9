@@ -50,6 +50,9 @@
     <ClInclude Include="Zombie.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Cursor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="OpenSans-Regular.ttf">
