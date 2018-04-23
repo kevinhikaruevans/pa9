@@ -7,6 +7,8 @@
 #include "TitleScreen.h"
 #include "Character.h"
 #include "Zombie.h"
+#include "Background.h"
+#include "Obstacle.h"
 
 
 //int main()
@@ -49,6 +51,8 @@ int main()
 	Character player({ 100.0f, 100.0f });
 
 	Zombie *enemy = new Zombie();
+
+	Background *test = new Background(0,0,800,600,"overcast.jpg");//Just a picture I had available
 
 	//Timepoint for delta time measurement
 	auto timePoint = std::chrono::steady_clock::now();
@@ -105,6 +109,8 @@ int main()
 
 		// Clear screen
 		window.clear();
+		//Scenery - always draw before characters
+		test->draw(window);
 		// Draw the sprite
 		player.draw(window);	
 		enemy->draw(window);
