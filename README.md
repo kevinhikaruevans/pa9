@@ -1,5 +1,17 @@
 # pa9
 
+Pending Pull Requests:
+    Background & Scenery
+    GameScreen Update
+    Crosshair Update
+  
+TODO:
+    Collision
+    Shooting
+    Damage & Health Modifications
+    Choosing final backgrounds, map objects, title screen. 
+    Game Mechanics - how many zombies per wave? Win conditions for each wave. 
+    
 The ninth PA. 
 
 # Installation
