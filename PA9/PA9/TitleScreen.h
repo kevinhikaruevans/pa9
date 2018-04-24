@@ -1,6 +1,8 @@
 #pragma once
 #include "AboutScreen.h"
 #include "BaseScreen.h"
+#include "GameScreen.h"
+//#include "State.h"
 
 #define MENU_SIZE 3
 
@@ -110,7 +112,7 @@ public:
 					switch (m_SelectedMenuOption) {
 						case MENU_OPTION_PLAY:
 							// TODO
-							// state.setCurrentScreen(new GameScreen());
+							state.setCurrentScreen(new GameScreen());
 							break;
 						case MENU_OPTION_ABOUT:
 							// update the screen to be a new instance of the AboutScreen
