@@ -80,9 +80,6 @@ public:
 	}	
 	
 private:
-
-
-private:
 	//static constexpr float speed = 100.0f;
 	//sf::Vector2f position;
 	//sf::Vector2f velocity = { 0.0f, 0.0f };
