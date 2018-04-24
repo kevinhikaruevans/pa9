@@ -19,7 +19,7 @@ public:
 	Zombie() : Character(this->position)
 	{
 		this->zombieTexture.loadFromFile("zombiespritesheet.jpg");	
-		this->position = { 200.0f, 200.0f };
+		this->position = { static_cast<float>(rand() % 800), static_cast<float>(rand() % 600) };
 		this->sprite.setScale(1,1);
 		this->sprite.setTextureRect({ 0,0, 32, 32 });
 		this->sprite.setTexture(zombieTexture);	
@@ -29,10 +29,9 @@ public:
 		animations[int(AnimationIndex::WalkingDown)] = Animation(32, 0, 32, 32, "zombiespritesheet.jpg", 1);
 		animations[int(AnimationIndex::WalkingLeft)] = Animation(32, 32, 32, 32, "zombiespritesheet.jpg", 1);
 		animations[int(AnimationIndex::WalkingRight)] = Animation(32, 64, 32, 32, "zombiespritesheet.jpg", 1);
-
 	}
 	
-	//void draw();
+	
 	void setDirection(const sf::Vector2f &dir)
 	{
 		
@@ -75,7 +74,10 @@ public:
 		sprite.setPosition(position);
 	}
 
-	
+	void takeDamage()
+	{
+
+	}	
 	
 private:
 
@@ -87,7 +89,5 @@ private:
 	//sf::Sprite sprite;
 	Animation animations[int(AnimationIndex::Count)];
 	AnimationIndex curAnimation = AnimationIndex::WalkingDown;
-	sf::Texture zombieTexture;
-
-	
+	sf::Texture zombieTexture;	
 };

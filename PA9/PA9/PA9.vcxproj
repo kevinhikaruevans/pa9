@@ -157,6 +157,7 @@
     <ClInclude Include="BaseScreen.h" />
     <ClInclude Include="ScreenType.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="Cursor.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Scenery.h" />
