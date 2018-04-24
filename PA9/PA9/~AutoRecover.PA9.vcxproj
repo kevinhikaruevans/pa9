@@ -142,8 +142,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BaseScreen.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="State.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -155,9 +155,7 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="BaseScreen.h" />
-    <ClInclude Include="ScreenType.h" />
     <ClInclude Include="Character.h" />
-    <ClInclude Include="Cursor.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Scenery.h" />

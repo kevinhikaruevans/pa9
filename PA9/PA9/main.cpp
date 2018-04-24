@@ -1,49 +1,39 @@
 #include <SFML/Graphics.hpp>
 #include <chrono>
 #include <vector>
-
-#include "State.h"
 #include "BaseScreen.h"
 #include "TitleScreen.h"
 #include "Character.h"
 #include "Zombie.h"
 #include "Cursor.h"
-
-
-//int main()
-//{
-//	sf::RenderWindow window(sf::VideoMode(800, 600), "PA9");
-//	GameState state;
-//
-//	window.setFramerateLimit(60);
-//	state.setCurrentScreen(new TitleScreen());
-//	
-//	
-//
-//	while (window.isOpen())
-//	{
-//		sf::Event event;
-//
-//		while (window.pollEvent(event))
-//		{
-//			if (event.type == sf::Event::Closed)
-//				window.close();
-//
-//			state.getCurrentScreen()->handleEvents(event, window, state);
-//		}
-//
-//		window.clear();
-//
-//		state.getCurrentScreen()->draw(window, state);
-//
-//		window.display();
-//	}
-//
-//	return 0;
-//}
+#include "Background.h"
+#include "Obstacle.h"
 
 int main()
 {
+	sf::RenderWindow window(sf::VideoMode(800, 600), "PA9");
+	window.setFramerateLimit(60);
+
+	BaseScreen *curScreen = new TitleScreen();
+	ScreenType switchScreenTo = Title;
+
+	do {
+		switchScreenTo = curScreen->run(window);
+		BaseScreen *prevScreen = curScreen;
+
+		switch (switchScreenTo) {
+		case Title:
+			curScreen = new TitleScreen();
+			break;
+		case About:
+			curScreen = new AboutScreen();
+			break;
+		}
+	} while (switchScreenTo != 0);
+
+	return 0;
+
+  /*
 	// Create the main window
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
 	Cursor newCursor(window);
@@ -58,6 +48,8 @@ int main()
 
 
 	Zombie *enemy = new Zombie();
+
+	Background *test = new Background(0,0,800,600,"overcast.jpg");//Just a picture I had available
 
 	//Timepoint for delta time measurement
 	auto timePoint = std::chrono::steady_clock::now();
@@ -114,6 +106,8 @@ int main()
 
 		// Clear screen
 		window.clear();
+		//Scenery - always draw before characters
+		test->draw(window);
 		// Draw the sprite
 		for (int i = 0; i < 25; ++i)
 		{
@@ -129,5 +123,6 @@ int main()
 		newCursor.setPosition(window);
 		window.display();
 	}
-	return EXIT_SUCCESS;
+	return EXIT_SUCCESS;*/
+
 }
