@@ -1,4 +1,9 @@
 #pragma once
+#include <SFML/Graphics.hpp>
+#include <chrono>
+#include <vector>
+#include <list>
+#include "Projectile.h"
 #include "Character.h"
 #include "Zombie.h"
 #include "Cursor.h"
@@ -6,9 +11,7 @@
 #include "Obstacle.h"
 #include "BaseScreen.h"
 #include "Cursor.h"
-#include <SFML/Graphics.hpp>
-#include <chrono>
-#include <vector>
+
 class GameScreen
 	: public BaseScreen
 {
@@ -19,6 +22,7 @@ public:
 		m_Font.loadFromFile("OpenSans-Regular.ttf");
 	}
 	ScreenType run(sf::RenderWindow &window) {
+		//TODO: move these into private variables probs
 		Cursor newCursor(window);
 		Character player({ 100.0f, 100.0f });
 		Character *zombieArray[25];
@@ -28,18 +32,25 @@ public:
 			zombieArray[i] = new Zombie();
 		}
 
-
+		std::list<Projectile> projectiles;
 		Zombie *enemy = new Zombie();
 		Background *test = new Background(0, 0, 800, 600, "overcast.jpg"); //Just a picture I had available
 
 		//Timepoint for delta time measurement
 		auto timePoint = std::chrono::steady_clock::now();
-
+		
 		while (window.isOpen()) {
 			// Process events
 			sf::Event event;
 			while (window.pollEvent(event))
 			{
+				if (event.type == sf::Event::MouseButtonPressed) {
+					sf::Vector2i target = { event.mouseButton.x, event.mouseButton.y };
+					sf::Vector2f source = player.getPosition();
+					source.x += 10;
+					source.y += 10;
+					projectiles.push_front(Projectile(source, target));
+				}
 				// Close window: exit
 				if (event.type == sf::Event::Closed)
 					window.close();
@@ -75,6 +86,19 @@ public:
 			player.setDirection(dir);
 			player.update(dt);
 
+			for (auto it = projectiles.begin(); it != projectiles.end();) {
+				auto & projectile = *it;
+				projectile.update();
+
+				if (projectile.shouldBeDeleted(window)) {
+					it = projectiles.erase(it);
+				}
+				else
+					it++;
+				
+			}
+
+
 			sf::Vector2f direction = { 0.0f, 0.0f };
 			//direction = (player.getPosition() - enemy->getPosition());
 
@@ -100,6 +124,11 @@ public:
 			//enemy->draw(window);
 			// Update the window
 			newCursor.setPosition(window);
+
+
+			for (Projectile &p : projectiles) {
+				window.draw(p);
+			}
 			window.display();
 		}
 
