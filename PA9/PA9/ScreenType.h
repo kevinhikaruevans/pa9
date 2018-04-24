@@ -1,6 +1,6 @@
 #pragma once
 
-typedef enum ScreenType {
+enum ScreenType {
 	Exit,
 	Title,
 	About,
