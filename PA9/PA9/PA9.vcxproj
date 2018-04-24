@@ -161,7 +161,6 @@
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Scenery.h" />
-    <ClInclude Include="State.h" />
     <ClInclude Include="TitleScreen.h" />
     <ClInclude Include="Zombie.h" />
   </ItemGroup>

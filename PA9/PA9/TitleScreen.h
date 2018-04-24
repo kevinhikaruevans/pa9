@@ -52,8 +52,7 @@ public:
 					case sf::Keyboard::Return: {
 						switch (m_SelectedMenuOption) {
 						case MENU_OPTION_PLAY:
-							// TODO
-							// state.setCurrentScreen(new GameScreen());
+							return Game;
 							break;
 						case MENU_OPTION_ABOUT:
 							// update the screen to be a new instance of the AboutScreen
