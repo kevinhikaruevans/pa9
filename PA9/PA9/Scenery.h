@@ -27,6 +27,73 @@ public:
 		return image;
 	}
 
+	bool playerWithinBounds(Character & p) {
+		if (p.getPosition().y >= bounds.getPosition().y -24 && p.getPosition().y <= bounds.getPosition().y + bounds.getSize().y -24) {
+			if (p.getPosition().x >= bounds.getPosition().x - 20 && p.getPosition().x <= bounds.getPosition().x + bounds.getSize().x -20) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
+
+	bool playerOnTopBound(Character & p){
+		if (this->playerWithinBounds(p)) {
+			if (p.getPosition().y < this->getBounds().getPosition().y) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
+	bool playerOnLeftBound(Character & p) {
+		if (this->playerWithinBounds(p)) {
+			if (p.getPosition().x < this->getBounds().getPosition().x) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
+	bool playerOnBottomBound(Character & p) {
+		if (this->playerWithinBounds(p)) {
+			if (p.getPosition().y > this->getBounds().getPosition().y + this->getBounds().getSize().y - 48) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
+	bool playerOnRightBound(Character & p) {
+		if (this->playerWithinBounds(p)) {
+			if (p.getPosition().x > this->getBounds().getPosition().x + this->getBounds().getSize().x - 40) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
+
 private:
 
 	sf::Texture texture;

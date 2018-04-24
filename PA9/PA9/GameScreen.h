@@ -11,6 +11,7 @@
 #include "Obstacle.h"
 #include "BaseScreen.h"
 #include "Cursor.h"
+#include <iostream>
 
 class GameScreen
 	: public BaseScreen
@@ -34,7 +35,9 @@ public:
 
 		std::list<Projectile> projectiles;
 		Zombie *enemy = new Zombie();
-		Background *test = new Background(0, 0, 800, 600, "overcast.jpg"); //Just a picture I had available
+		Background *testBackground = new Background(0, 0, 800, 600, "overcast.jpg");
+		Obstacle *testObstacle = new Obstacle(50, 250, 140, 100, "barricade1.png",100);
+		int boundscount = 0;
 
 		//Timepoint for delta time measurement
 		auto timePoint = std::chrono::steady_clock::now();
@@ -68,19 +71,27 @@ public:
 			sf::Vector2f dir = { 0.0f, 0.0f };
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			{
-				dir.y -= 1.0f;
+				if(!testObstacle->playerOnBottomBound(player)){
+					dir.y -= 1.0f;
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 			{
-				dir.y += 1.0f;
+				if (!testObstacle->playerOnTopBound(player)) {
+					dir.y += 1.0f;
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			{
-				dir.x -= 1.0f;
+				if (!testObstacle->playerOnRightBound(player)) {
+					dir.x -= 1.0f;
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			{
-				dir.x += 1.0f;
+				if (!testObstacle->playerOnLeftBound(player)) {
+					dir.x += 1.0f;
+				}
 			}
 
 			player.setDirection(dir);
@@ -106,18 +117,41 @@ public:
 			//enemy->setDirection(direction); //need different way to move towards character - position vector - get x,y?
 			//enemy->update(dt);
 
+			/*if (testObstacle->playerWithinBounds(player)) {
+				std::cout << "player within barrier" <<boundscount<< std::endl;
+				boundscount++;
+				std::cout << "O:" << testObstacle->getBounds().getPosition().x << "," << testObstacle->getBounds().getPosition().y << std::endl
+					<< "P:" << player.getPosition().x << "," << player.getPosition().y << std::endl;
+			}*/
 
 			// Clear screen
 			window.clear();
 			//Scenery - always draw before characters
-			test->draw(window);
+			testBackground->draw(window);
+			testObstacle->draw(window);
 			// Draw the sprite
 			for (int i = 0; i < 25; ++i)
 			{
 				direction = (player.getPosition() - zombieArray[i]->getPosition());
 
 				zombieArray[i]->setDirection(direction);
-				zombieArray[i]->update(dt);
+
+				if (testObstacle->playerOnTopBound(*zombieArray[i]) && direction.y > 0) {
+					zombieArray[i]->update(0);
+				}
+				else if (testObstacle->playerOnLeftBound(*zombieArray[i]) && direction.x > 0) {
+					zombieArray[i]->update(0);
+				}
+				else if (testObstacle->playerOnBottomBound(*zombieArray[i]) && direction.y < 0) {
+					zombieArray[i]->update(0);
+				}
+				else if (testObstacle->playerOnRightBound(*zombieArray[i]) && direction.x < 0) {
+					zombieArray[i]->update(0);
+				}
+				else{
+					zombieArray[i]->update(dt);
+				}
+
 				zombieArray[i]->draw(window);
 			}
 			player.draw(window);
