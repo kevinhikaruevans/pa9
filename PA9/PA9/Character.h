@@ -84,7 +84,7 @@ public:
 			if (isHitByProjectile(projectile)) {
 				it = projectiles.erase(it);
 
-				takeDamage((float)10);
+				takeDamage((float)100);
 			}
 			else {
 				it++;
