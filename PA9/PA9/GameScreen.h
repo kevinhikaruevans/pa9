@@ -25,40 +25,18 @@ public:
 	{
 		m_Font.loadFromFile("OpenSans-Regular.ttf");
 	}
+
 	ScreenType run(sf::RenderWindow &window) {
-		//TODO: move these into private variables probs
 		Cursor newCursor(window);
 		Character player({ 100.0f, 100.0f });
 
 		std::list<Projectile> projectiles;
-//<<<<<<< HEAD
-		/*std::list<Character *> zombies;
-||||||| merged common ancestors
-		std::list<Character *> zombies;
-=======
->>>>>>> origin/master
-
-		for (int i = 0; i < 25; ++i) {
-<<<<<<< HEAD
-			zombies.push_front(new Zombie());
-		}*/
 		
 		//Wave Count
 		int curRound = 1;
 		
 		//List uses single Zombie object to spawn a new list of zombies
 		heapZombies = spawnZombie.spawnWave(25); //int represents # of zombies - can tie into set 2D array of rounds/count
-		
-		if (heapZombies.empty()) //if all zombies die
-		{
-			curRound++; //advance the round and spawn next wave
-			heapZombies = spawnZombie.spawnWave(30);
-//||||||| merged common ancestors
-			heapZombies.push_front(new Zombie());
-//=======			
-//>>>>>>> origin/master
-		}
-
 		
 
 		Background *testBackground = new Background(0, 0, 1920, 1080, "background.jpg");
@@ -175,57 +153,21 @@ public:
 			}
 
 			
-			//direction = (player.getPosition() - enemy->getPosition());
 
 
-			//enemy->setDirection(direction); //need different way to move towards character - position vector - get x,y?
-			//enemy->update(dt);
-
-			/*if (testObstacle->playerWithinBounds(player)) {
-			std::cout << "player within barrier" <<boundscount<< std::endl;
-			boundscount++;
-			std::cout << "O:" << testObstacle->getBounds().getPosition().x << "," << testObstacle->getBounds().getPosition().y << std::endl
-			<< "P:" << player.getPosition().x << "," << player.getPosition().y << std::endl;
-			}*/
-//<<<<<<< HEAD
-
-			///ZombieWave Merge Conflict - Should be handled by above loop?
-
-			/*for (Character *c : heapZombies)
+			if (heapZombies.empty()) //if all zombies die
 			{
-				direction = (player.getPosition() - c->getPosition());
-
-				c->setDirection(direction);
-
-				if (testObstacle->playerOnTopBound(*c) && direction.y > 0) {
-					c->update(0);
-				}
-				else if (testObstacle->playerOnLeftBound(*c) && direction.x > 0) {
-					c->update(0);
-				}
-				else if (testObstacle->playerOnBottomBound(*c) && direction.y < 0) {
-					c->update(0);
-				}
-				else if (testObstacle->playerOnRightBound(*c) && direction.x < 0) {
-					c->update(0);
-				}
-				else {
-					c->update(dt);
-				}
-			}*/
-
-		   ///***************************************************************************
-//=======
-//>>>>>>> origin/master
-
+				curRound++; //advance the round and spawn next wave
+				heapZombies.merge(spawnZombie.spawnWave(curRound * 20));
+			}
 
 			// Clear screen
 			window.clear();
 			//Scenery - always draw before characters
 			testBackground->draw(window);
 			testObstacle->draw(window);			
-			// Draw the sprite
-//<<<<<<< HEAD
+
+			// draw zombies
 			for (Character *c : heapZombies)
 			{		
 				c->draw(window);
