@@ -65,9 +65,9 @@ public:
 		sprite.setPosition(position);
 	}
 
-	virtual void takeDamage()
+	virtual void takeDamage(float damage)
 	{
-		
+		mHealth -= damage;
 	}
 
 	virtual bool isTouchingCharacter(Character &c) {
@@ -84,7 +84,7 @@ public:
 			if (isHitByProjectile(projectile)) {
 				it = projectiles.erase(it);
 
-				takeDamage();
+				takeDamage((float)10);
 			}
 			else {
 				it++;
