@@ -8,6 +8,11 @@ public:
 	~Background();
 
 	void draw(sf::RenderWindow &window) {
-		window.draw(getImage());
+		window.draw(getImage());		
+	}
+
+	void setScale(float xScale, float yScale, sf::Sprite &spr)
+	{
+		spr.setScale({ xScale, yScale });
 	}
 };

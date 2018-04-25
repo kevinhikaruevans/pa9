@@ -13,7 +13,7 @@ public:
 		image.setPosition(xPos, yPos);
 
 		bounds.setPosition(xPos, yPos);
-		bounds.setSize(* new sf::Vector2f(xSize,ySize));
+		bounds.setSize(*new sf::Vector2f(xSize, ySize));		
 
 	};
 
@@ -23,7 +23,7 @@ public:
 		return bounds;
 	};
 
-	sf::Sprite getImage() {
+	sf::Sprite & getImage() {
 		return image;
 	}
 
@@ -93,6 +93,8 @@ public:
 			return false;
 		}
 	}
+
+	
 
 private:
 
