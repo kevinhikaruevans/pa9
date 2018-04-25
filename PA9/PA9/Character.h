@@ -67,9 +67,31 @@ public:
 
 	virtual void takeDamage()
 	{
-
+		
 	}
 
+	virtual bool isTouchingCharacter(Character &c) {
+		return this->sprite.getGlobalBounds().intersects(c.sprite.getGlobalBounds());
+	}
+	virtual bool isHitByProjectile(Projectile projectile) {
+		return projectile.getGlobalBounds().intersects(sprite.getGlobalBounds());
+	}
+
+	virtual void handleProjectiles(std::list<Projectile> &projectiles) {
+		for (auto it = projectiles.begin(); it != projectiles.end();) {
+			auto &projectile = *it;
+			
+			if (isHitByProjectile(projectile)) {
+				it = projectiles.erase(it);
+
+				takeDamage();
+			}
+			else {
+				it++;
+			}
+		}
+	}
+	
 	sf::Vector2f getPosition()
 	{
 		return this->position;

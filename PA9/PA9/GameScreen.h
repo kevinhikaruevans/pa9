@@ -16,6 +16,8 @@
 class GameScreen
 	: public BaseScreen
 {
+private:
+	std::list<Character *> enemies;
 public:
 	GameScreen()
 		: BaseScreen("Game Screen")
@@ -26,22 +28,21 @@ public:
 		//TODO: move these into private variables probs
 		Cursor newCursor(window);
 		Character player({ 100.0f, 100.0f });
-		Character *zombieArray[25];
-
-		for (int i = 0; i < 25; ++i)
-		{
-			zombieArray[i] = new Zombie();
-		}
 
 		std::list<Projectile> projectiles;
-		Zombie *enemy = new Zombie();
+
+		for (int i = 0; i < 25; ++i) {
+			enemies.push_front(new Zombie());
+		}
+
+
 		Background *testBackground = new Background(0, 0, 800, 600, "overcast.jpg");
-		Obstacle *testObstacle = new Obstacle(50, 250, 140, 100, "barricade1.png",100);
+		Obstacle *testObstacle = new Obstacle(50, 250, 140, 100, "barricade1.png", 100);
 		int boundscount = 0;
 
 		//Timepoint for delta time measurement
 		auto timePoint = std::chrono::steady_clock::now();
-		
+
 		while (window.isOpen()) {
 			// Process events
 			sf::Event event;
@@ -71,7 +72,7 @@ public:
 			sf::Vector2f dir = { 0.0f, 0.0f };
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			{
-				if(!testObstacle->playerOnBottomBound(player)){
+				if (!testObstacle->playerOnBottomBound(player)) {
 					dir.y -= 1.0f;
 				}
 			}
@@ -106,11 +107,48 @@ public:
 				}
 				else
 					it++;
-				
 			}
 
+			for (auto it = enemies.begin(); it != enemies.end();) {
+				Character *c = *it;
+				sf::Vector2f direction = (player.getPosition() - c->getPosition());
 
-			sf::Vector2f direction = { 0.0f, 0.0f };
+				if (c->isTouchingCharacter(player)) {
+					// zombie attacked the player...
+					// player should probably take damage or something here.
+					delete c;
+					it = enemies.erase(it);
+				}
+				else if (c->getHealth() <= 0) {
+					delete c;
+					it = enemies.erase(it);
+				}
+				else {
+					c->handleProjectiles(projectiles);
+					c->setDirection(direction);
+
+					if (testObstacle->playerOnTopBound(*c) && direction.y > 0) {
+						c->update(0);
+					}
+					else if (testObstacle->playerOnLeftBound(*c) && direction.x > 0) {
+						c->update(0);
+					}
+					else if (testObstacle->playerOnBottomBound(*c) && direction.y < 0) {
+						c->update(0);
+					}
+					else if (testObstacle->playerOnRightBound(*c) && direction.x < 0) {
+						c->update(0);
+					}
+					else {
+						c->update(dt);
+					}
+
+					it++;
+				}
+
+			}
+
+			
 			//direction = (player.getPosition() - enemy->getPosition());
 
 
@@ -118,11 +156,12 @@ public:
 			//enemy->update(dt);
 
 			/*if (testObstacle->playerWithinBounds(player)) {
-				std::cout << "player within barrier" <<boundscount<< std::endl;
-				boundscount++;
-				std::cout << "O:" << testObstacle->getBounds().getPosition().x << "," << testObstacle->getBounds().getPosition().y << std::endl
-					<< "P:" << player.getPosition().x << "," << player.getPosition().y << std::endl;
+			std::cout << "player within barrier" <<boundscount<< std::endl;
+			boundscount++;
+			std::cout << "O:" << testObstacle->getBounds().getPosition().x << "," << testObstacle->getBounds().getPosition().y << std::endl
+			<< "P:" << player.getPosition().x << "," << player.getPosition().y << std::endl;
 			}*/
+
 
 			// Clear screen
 			window.clear();
@@ -130,29 +169,8 @@ public:
 			testBackground->draw(window);
 			testObstacle->draw(window);
 			// Draw the sprite
-			for (int i = 0; i < 25; ++i)
-			{
-				direction = (player.getPosition() - zombieArray[i]->getPosition());
-
-				zombieArray[i]->setDirection(direction);
-
-				if (testObstacle->playerOnTopBound(*zombieArray[i]) && direction.y > 0) {
-					zombieArray[i]->update(0);
-				}
-				else if (testObstacle->playerOnLeftBound(*zombieArray[i]) && direction.x > 0) {
-					zombieArray[i]->update(0);
-				}
-				else if (testObstacle->playerOnBottomBound(*zombieArray[i]) && direction.y < 0) {
-					zombieArray[i]->update(0);
-				}
-				else if (testObstacle->playerOnRightBound(*zombieArray[i]) && direction.x < 0) {
-					zombieArray[i]->update(0);
-				}
-				else{
-					zombieArray[i]->update(dt);
-				}
-
-				zombieArray[i]->draw(window);
+			for (Character *c : enemies) {
+				c->draw(window);
 			}
 			player.draw(window);
 			//enemy->draw(window);

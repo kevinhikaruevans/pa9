@@ -21,8 +21,10 @@ public:
 		this->zombieTexture.loadFromFile("zombiespritesheet.jpg");	
 		this->position = { static_cast<float>(rand() % 800), static_cast<float>(rand() % 600) };
 		this->sprite.setScale(1,1);
-		this->sprite.setTextureRect({ 0,0, 32, 32 });
+		this->sprite.setTextureRect({ 0, 0, 32, 32 });
 		this->sprite.setTexture(zombieTexture);	
+		this->sprite.setOrigin({16, 16});
+
 		this->animations[0].setAnimationFrames(1);
 
 		animations[int(AnimationIndex::WalkingUp)] = Animation(32, 96, 32, 32, "zombiespritesheet.jpg", 1);
@@ -74,9 +76,10 @@ public:
 		sprite.setPosition(position);
 	}
 
+	
 	void takeDamage()
 	{
-
+		this->setHealth(-100);
 	}	
 	
 private:
