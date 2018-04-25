@@ -17,7 +17,7 @@ public:
 		: BaseScreen("Title Screen")
 	{
 		m_Font.loadFromFile("OpenSans-Regular.ttf");
-		m_TitleFont.loadFromFile("OpenSans-Bold.ttf");
+		m_TitleFont.loadFromFile("Creepster-Regular.ttf");
 
 		m_SelectedMenuOption = 0;
 		Button *b1 = createButton("Play");
