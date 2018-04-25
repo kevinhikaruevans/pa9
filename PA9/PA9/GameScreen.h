@@ -26,15 +26,17 @@ public:
 		//TODO: move these into private variables probs
 		Cursor newCursor(window);
 		Character player({ 100.0f, 100.0f });
-		Character *zombieArray[25];
+		//Character *zombieArray[25];
 
-		for (int i = 0; i < 25; ++i)
-		{
-			zombieArray[i] = new Zombie();
-		}
 
 		std::list<Projectile> projectiles;
-		Zombie *enemy = new Zombie();
+		std::list<Character> zombies;
+
+		for (int i = 0; i < 25; ++i) {
+			zombies.push_front(Zombie());
+		}
+
+		
 		Background *testBackground = new Background(0, 0, 800, 600, "overcast.jpg");
 		Obstacle *testObstacle = new Obstacle(50, 250, 140, 100, "barricade1.png",100);
 		int boundscount = 0;
@@ -130,29 +132,29 @@ public:
 			testBackground->draw(window);
 			testObstacle->draw(window);
 			// Draw the sprite
-			for (int i = 0; i < 25; ++i)
+			for(Character &zombie : zombies)
 			{
-				direction = (player.getPosition() - zombieArray[i]->getPosition());
+				direction = (player.getPosition() - zombie.getPosition());
 
-				zombieArray[i]->setDirection(direction);
+				zombie.setDirection(direction);
 
-				if (testObstacle->playerOnTopBound(*zombieArray[i]) && direction.y > 0) {
-					zombieArray[i]->update(0);
+				if (testObstacle->playerOnTopBound(zombie) && direction.y > 0) {
+					zombie.update(0);
 				}
-				else if (testObstacle->playerOnLeftBound(*zombieArray[i]) && direction.x > 0) {
-					zombieArray[i]->update(0);
+				else if (testObstacle->playerOnLeftBound(zombie) && direction.x > 0) {
+					zombie.update(0);
 				}
-				else if (testObstacle->playerOnBottomBound(*zombieArray[i]) && direction.y < 0) {
-					zombieArray[i]->update(0);
+				else if (testObstacle->playerOnBottomBound(zombie) && direction.y < 0) {
+					zombie.update(0);
 				}
-				else if (testObstacle->playerOnRightBound(*zombieArray[i]) && direction.x < 0) {
-					zombieArray[i]->update(0);
+				else if (testObstacle->playerOnRightBound(zombie) && direction.x < 0) {
+					zombie.update(0);
 				}
 				else{
-					zombieArray[i]->update(dt);
+					zombie.update(dt);
 				}
 
-				zombieArray[i]->draw(window);
+				zombie.draw(window);
 			}
 			player.draw(window);
 			//enemy->draw(window);
