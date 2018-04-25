@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "Animation.h"
-
+#include "Bounds.h"
 #define MAX_HEALTH 100
 
 
@@ -69,7 +69,23 @@ public:
 	{
 
 	}
-
+	virtual bool isHitByProjectile(Projectile projectile) {
+		return Bounds::isHit(projectile.getPosition(), projectile.getRadius(), this->position);
+	}
+	virtual void handleProjectiles(std::list<Projectile> &projectiles) {
+		for (auto it = projectiles.begin(); it != projectiles.end();) {
+			auto &projectile = *it;
+			
+			if (isHitByProjectile(projectile)) {
+				it = projectiles.erase(it);
+				takeDamage();
+			}
+			else {
+				it++;
+			}
+		}
+	}
+	
 	sf::Vector2f getPosition()
 	{
 		return this->position;

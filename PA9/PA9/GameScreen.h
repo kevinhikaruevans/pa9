@@ -26,11 +26,9 @@ public:
 		//TODO: move these into private variables probs
 		Cursor newCursor(window);
 		Character player({ 100.0f, 100.0f });
-		//Character *zombieArray[25];
-
 
 		std::list<Projectile> projectiles;
-		std::list<Character> zombies;
+		std::list<Zombie> zombies;
 
 		for (int i = 0; i < 25; ++i) {
 			zombies.push_front(Zombie());
@@ -108,7 +106,6 @@ public:
 				}
 				else
 					it++;
-				
 			}
 
 
@@ -125,14 +122,7 @@ public:
 				std::cout << "O:" << testObstacle->getBounds().getPosition().x << "," << testObstacle->getBounds().getPosition().y << std::endl
 					<< "P:" << player.getPosition().x << "," << player.getPosition().y << std::endl;
 			}*/
-
-			// Clear screen
-			window.clear();
-			//Scenery - always draw before characters
-			testBackground->draw(window);
-			testObstacle->draw(window);
-			// Draw the sprite
-			for(Character &zombie : zombies)
+			for (Zombie &zombie : zombies)
 			{
 				direction = (player.getPosition() - zombie.getPosition());
 
@@ -150,10 +140,19 @@ public:
 				else if (testObstacle->playerOnRightBound(zombie) && direction.x < 0) {
 					zombie.update(0);
 				}
-				else{
+				else {
 					zombie.update(dt);
 				}
 
+			}
+
+			// Clear screen
+			window.clear();
+			//Scenery - always draw before characters
+			testBackground->draw(window);
+			testObstacle->draw(window);
+			// Draw the sprite
+			for (Zombie &zombie : zombies) {
 				zombie.draw(window);
 			}
 			player.draw(window);
