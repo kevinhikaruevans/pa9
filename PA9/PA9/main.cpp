@@ -3,9 +3,9 @@ WSU | CPT_S 122 | Spring 2018
 PA 9 - A Graphical Game or Application
 Due: April 25, 2018
 Group Names:
-	David
-	Jonathan
-	Kevin
+	David Henshaw
+	Jonathan Kwon
+	Kevin Evans
 	Riley Chase
 */
 
