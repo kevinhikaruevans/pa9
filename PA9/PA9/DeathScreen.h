@@ -34,6 +34,7 @@ public:
 					}
 				}
 			}
+			window.setView(window.getDefaultView());
 			window.clear();
 			for (vector<Drawable *>::iterator i = elements.begin(); i != elements.end(); ++i) {
 				window.draw(**i);
