@@ -15,10 +15,10 @@ public:
 	DeathScreen()
 		: BaseScreen("Death Screen")
 	{
-		m_Font.loadFromFile("OpenSans-Regular.ttf");
+		m_Font.loadFromFile("Creepster-Regular.ttf");
 		Text *buffer;
 
-		buffer = new sf::Text("You are dead! Press RETURN to continue.", this->m_Font, 24U);
+		buffer = new sf::Text("You are dead!\n\nPress RETURN to continue.", this->m_Font, 24U);
 		buffer->setPosition(10, 50);
 		elements.push_back(buffer);
 	}
