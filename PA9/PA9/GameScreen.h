@@ -14,6 +14,7 @@
 #include <iostream>
 
 #define WINDOW_SCALE 0.39f
+#define NUM_OBST 10
 
 class GameScreen
 	: public BaseScreen
@@ -53,7 +54,12 @@ public:
 				testBackgrounds[i] = new Background(1920 * ((float)i-10), 1080*2, 1920, 1080, "background.jpg");
 			}
 		}
-		Obstacle *testObstacle = new Obstacle(50, 250, 140, 100, "barricade1.png", 100);		
+		//Obstacle *testObstacle = new Obstacle(50, 250, 140, 100, "barricade1.png", 100);
+		Obstacle *testObstacles[NUM_OBST];
+		for (int i = 0; i < NUM_OBST; i++) {
+			testObstacles[i] = new Obstacle(100+200 * (float)i, 100 + 200 * (float)i, 140, 100, "barricade1.png", 100);
+		}
+		bool onBoundry = false, zombieOnBoundry = false;
 		//int boundscount = 0;
 		sf::Vector2f playerFollowVector = *new sf::Vector2f(400, 300);
 		sf::View * followPlayerView = new sf::View(playerFollowVector,*new sf::Vector2f(800,600));
@@ -87,31 +93,44 @@ public:
 				timePoint = newTimePoint;
 			}
 
+			onBoundry = false;
 			//Handle Input
 			sf::Vector2f dir = { 0.0f, 0.0f };
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			{
-				if (!testObstacle->playerOnBottomBound(player)) {
-					dir.y -= 1.0f;
+				for (int i = 0; i < NUM_OBST; i++) {
+					if (testObstacles[i]->playerOnBottomBound(player)) {
+						onBoundry = true;
+					}
 				}
+				onBoundry ? dir.y = 0.0f : dir.y -= 1.0f;
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 			{
-				if (!testObstacle->playerOnTopBound(player)) {
-					dir.y += 1.0f;
+				for (int i = 0; i < NUM_OBST; i++) {
+					if (testObstacles[i]->playerOnTopBound(player)) {
+						onBoundry = true;
+					}
 				}
+				onBoundry ? dir.y = 0.0f : dir.y += 1.0f;
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			{
-				if (!testObstacle->playerOnRightBound(player)) {
-					dir.x -= 1.0f;
+				for (int i = 0; i < NUM_OBST; i++) {
+					if (testObstacles[i]->playerOnRightBound(player)) {
+						onBoundry = true;
+					}
 				}
+				onBoundry ? dir.x = 0.0f : dir.x -= 1.0f;
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			{
-				if (!testObstacle->playerOnLeftBound(player)) {
-					dir.x += 1.0f;
+				for (int i = 0; i < NUM_OBST; i++) {
+					if (testObstacles[i]->playerOnLeftBound(player)) {
+						onBoundry = true;
+					}
 				}
+				onBoundry ? dir.x = 0.0f : dir.x += 1.0f;
 			}
 
 			player.setDirection(dir);
@@ -145,6 +164,7 @@ public:
 			for (auto it = heapZombies.begin(); it != heapZombies.end();) {
 				Character *c = *it;
 				sf::Vector2f direction = (player.getPosition() - c->getPosition());
+				zombieOnBoundry = false;
 
 				if (c->isTouchingCharacter(player)) {
 					// zombie attacked the player...
@@ -160,22 +180,28 @@ public:
 					c->handleProjectiles(projectiles);
 					c->setDirection(direction);
 
-					if (testObstacle->playerOnTopBound(*c) && direction.y > 0) {
-						c->update(0);
+					for (int i = 0; i < NUM_OBST; i++) {
+						if (testObstacles[i]->playerOnTopBound(*c) && direction.y > 0) {
+							zombieOnBoundry = true;
+						}
+						else if (testObstacles[i]->playerOnLeftBound(*c) && direction.x > 0) {
+							zombieOnBoundry = true;
+						}
+						else if (testObstacles[i]->playerOnBottomBound(*c) && direction.y < 0) {
+							zombieOnBoundry = true;
+						}
+						else if (testObstacles[i]->playerOnRightBound(*c) && direction.x < 0) {
+							zombieOnBoundry = true;
+						}
 					}
-					else if (testObstacle->playerOnLeftBound(*c) && direction.x > 0) {
-						c->update(0);
-					}
-					else if (testObstacle->playerOnBottomBound(*c) && direction.y < 0) {
-						c->update(0);
-					}
-					else if (testObstacle->playerOnRightBound(*c) && direction.x < 0) {
+
+
+					if(zombieOnBoundry){
 						c->update(0);
 					}
 					else {
 						c->update(dt);
 					}
-
 					it++;
 				}
 
@@ -198,7 +224,10 @@ public:
 			//Scenery - always draw before characters
       
 			//testBackground->draw(window);
-			testObstacle->draw(window);
+			//testObstacle->draw(window);
+			for (int i = 0; i < NUM_OBST; i++) {
+				testObstacles[i]->draw(window);
+			}
 			// Draw the sprite
 			for (Character *c : heapZombies) {
 
