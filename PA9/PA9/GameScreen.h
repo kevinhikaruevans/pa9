@@ -16,6 +16,8 @@
 class GameScreen
 	: public BaseScreen
 {
+private:
+	std::list<Character *> enemies;
 public:
 	GameScreen()
 		: BaseScreen("Game Screen")
@@ -28,10 +30,9 @@ public:
 		Character player({ 100.0f, 100.0f });
 
 		std::list<Projectile> projectiles;
-		std::list<Character *> zombies;
 
 		for (int i = 0; i < 25; ++i) {
-			zombies.push_front(new Zombie());
+			enemies.push_front(new Zombie());
 		}
 
 
@@ -108,7 +109,7 @@ public:
 					it++;
 			}
 
-			for (auto it = zombies.begin(); it != zombies.end();) {
+			for (auto it = enemies.begin(); it != enemies.end();) {
 				Character *c = *it;
 				sf::Vector2f direction = (player.getPosition() - c->getPosition());
 
@@ -116,11 +117,11 @@ public:
 					// zombie attacked the player...
 					// player should probably take damage or something here.
 					delete c;
-					it = zombies.erase(it);
+					it = enemies.erase(it);
 				}
 				else if (c->getHealth() <= 0) {
 					delete c;
-					it = zombies.erase(it);
+					it = enemies.erase(it);
 				}
 				else {
 					c->handleProjectiles(projectiles);
@@ -168,7 +169,7 @@ public:
 			testBackground->draw(window);
 			testObstacle->draw(window);
 			// Draw the sprite
-			for (Character *c : zombies) {
+			for (Character *c : enemies) {
 				c->draw(window);
 			}
 			player.draw(window);
