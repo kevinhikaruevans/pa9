@@ -18,8 +18,7 @@
 class GameScreen
 	: public BaseScreen
 {
-private:
-	std::list<Character *> enemies;
+	
 public:
 	GameScreen()
 		: BaseScreen("Game Screen")
@@ -32,11 +31,35 @@ public:
 		Character player({ 100.0f, 100.0f });
 
 		std::list<Projectile> projectiles;
+//<<<<<<< HEAD
+		/*std::list<Character *> zombies;
+||||||| merged common ancestors
+		std::list<Character *> zombies;
+=======
+>>>>>>> origin/master
 
 		for (int i = 0; i < 25; ++i) {
-			enemies.push_front(new Zombie());
+<<<<<<< HEAD
+			zombies.push_front(new Zombie());
+		}*/
+		
+		//Wave Count
+		int curRound = 1;
+		
+		//List uses single Zombie object to spawn a new list of zombies
+		heapZombies = spawnZombie.spawnWave(25); //int represents # of zombies - can tie into set 2D array of rounds/count
+		
+		if (heapZombies.empty()) //if all zombies die
+		{
+			curRound++; //advance the round and spawn next wave
+			heapZombies = spawnZombie.spawnWave(30);
+//||||||| merged common ancestors
+			heapZombies.push_front(new Zombie());
+//=======			
+//>>>>>>> origin/master
 		}
 
+		
 
 		Background *testBackground = new Background(0, 0, 1920, 1080, "background.jpg");
 		testBackground->setScale(WINDOW_SCALE, WINDOW_SCALE, (*testBackground).getImage()); //resize background image - could pass in ref to window to scale dynamically
@@ -112,7 +135,7 @@ public:
 					it++;
 			}
 
-			for (auto it = enemies.begin(); it != enemies.end();) {
+			for (auto it = heapZombies.begin(); it != heapZombies.end();) {
 				Character *c = *it;
 				sf::Vector2f direction = (player.getPosition() - c->getPosition());
 
@@ -120,11 +143,11 @@ public:
 					// zombie attacked the player...
 					// player should probably take damage or something here.
 					delete c;
-					it = enemies.erase(it);
+					it = heapZombies.erase(it);
 				}
 				else if (c->getHealth() <= 0) {
 					delete c;
-					it = enemies.erase(it);
+					it = heapZombies.erase(it);
 				}
 				else {
 					c->handleProjectiles(projectiles);
@@ -164,6 +187,36 @@ public:
 			std::cout << "O:" << testObstacle->getBounds().getPosition().x << "," << testObstacle->getBounds().getPosition().y << std::endl
 			<< "P:" << player.getPosition().x << "," << player.getPosition().y << std::endl;
 			}*/
+//<<<<<<< HEAD
+
+			///ZombieWave Merge Conflict - Should be handled by above loop?
+
+			/*for (Character *c : heapZombies)
+			{
+				direction = (player.getPosition() - c->getPosition());
+
+				c->setDirection(direction);
+
+				if (testObstacle->playerOnTopBound(*c) && direction.y > 0) {
+					c->update(0);
+				}
+				else if (testObstacle->playerOnLeftBound(*c) && direction.x > 0) {
+					c->update(0);
+				}
+				else if (testObstacle->playerOnBottomBound(*c) && direction.y < 0) {
+					c->update(0);
+				}
+				else if (testObstacle->playerOnRightBound(*c) && direction.x < 0) {
+					c->update(0);
+				}
+				else {
+					c->update(dt);
+				}
+			}*/
+
+		   ///***************************************************************************
+//=======
+//>>>>>>> origin/master
 
 
 			// Clear screen
@@ -172,7 +225,9 @@ public:
 			testBackground->draw(window);
 			testObstacle->draw(window);			
 			// Draw the sprite
-			for (Character *c : enemies) {
+//<<<<<<< HEAD
+			for (Character *c : heapZombies)
+			{		
 				c->draw(window);
 			}
 			player.draw(window);
@@ -192,5 +247,7 @@ public:
 
 private:
 	sf::Font m_Font;
+	std::list<Character*> heapZombies;
+	Zombie spawnZombie;
 
 };

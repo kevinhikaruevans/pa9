@@ -81,6 +81,16 @@ public:
 	{
 		this->setHealth(-100);
 	}	
+
+	std::list<Character*> spawnWave(int waveCount)
+	{
+		std::list<Character *> zombies;
+
+		for (int i = 0; i < waveCount; ++i) {
+			zombies.push_front(new Zombie());
+		}
+		return zombies;
+	}
 	
 private:
 	//static constexpr float speed = 100.0f;
