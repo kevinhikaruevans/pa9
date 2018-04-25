@@ -158,7 +158,7 @@ public:
 			if (heapZombies.empty()) //if all zombies die
 			{
 				curRound++; //advance the round and spawn next wave
-				heapZombies.merge(spawnZombie.spawnWave(curRound * 20));
+				heapZombies = spawnZombie.spawnWave(curRound * 20);
 			}
 
 			// Clear screen
