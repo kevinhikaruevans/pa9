@@ -67,7 +67,7 @@ public:
 			while (window.pollEvent(event))
 			{
 				if (event.type == sf::Event::MouseButtonPressed) {
-					sf::Vector2i target = { event.mouseButton.x, event.mouseButton.y };
+					sf::Vector2i target = { event.mouseButton.x + (int)window.getView().getCenter().x - 400, event.mouseButton.y + (int)window.getView().getCenter().y - 300 };
 					sf::Vector2f source = player.getPosition();
 					source.x += 10;
 					source.y += 10;
@@ -134,7 +134,7 @@ public:
 				auto & projectile = *it;
 				projectile.update();
 
-				if (projectile.shouldBeDeleted(window)) {
+				if (projectile.shouldBeDeleted(window.getView())) {
 					it = projectiles.erase(it);
 				}
 				else

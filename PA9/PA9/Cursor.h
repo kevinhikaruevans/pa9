@@ -14,7 +14,7 @@ public:
 
 	void setPosition(sf::RenderWindow &window)
 	{
-		sprite.setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
+		sprite.setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)) + window.getView().getCenter() - sf::Vector2f(400,300));
 		window.draw(sprite);
 	}
 

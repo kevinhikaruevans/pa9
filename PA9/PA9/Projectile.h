@@ -29,13 +29,12 @@ public:
 		this->setPosition(position);
 	}
 
-	bool shouldBeDeleted(sf::Window &window) {
+	bool shouldBeDeleted(sf::View windowView) {
 		sf::Vector2f position = this->getPosition();
-		sf::Vector2u size = window.getSize();
-		return (position.x < 0)
-			|| (position.y < 0)
-			|| (position.x > size.x)
-			|| (position.y > size.y);
+		return (position.x < windowView.getCenter().x - windowView.getSize().x/2)
+			|| (position.y < windowView.getCenter().y - windowView.getSize().y / 2)
+			|| (position.x > windowView.getCenter().x + windowView.getSize().x / 2)
+			|| (position.y > windowView.getCenter().y + windowView.getSize().y / 2);
 	}
 private:
 	sf::Vector2i m_Target;
