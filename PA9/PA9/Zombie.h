@@ -19,7 +19,7 @@ public:
 	Zombie() : Character(this->position)
 	{
 		this->zombieTexture.loadFromFile("zombiespritesheet.jpg");	
-		this->position = { static_cast<float>(rand() % 800), static_cast<float>(rand() % 600) };
+		this->position = { static_cast<float>(rand() % 800), static_cast<float>(rand() % 600) };//Change -> safe area around player, spawn in area surrounding that
 		this->sprite.setScale(1,1);
 		this->sprite.setTextureRect({ 0, 0, 32, 32 });
 		this->sprite.setTexture(zombieTexture);	
@@ -82,12 +82,12 @@ public:
 		this->setHealth(-100);
 	}	
 
-	std::list<Character*> spawnWave(int waveCount)
+	std::list<Character*> spawnWave(int waveCount)//pass in player pos
 	{
 		std::list<Character *> zombies;
 
 		for (int i = 0; i < waveCount; ++i) {
-			zombies.push_front(new Zombie());
+			zombies.push_front(new Zombie());//pass in player pos
 		}
 		return zombies;
 	}
