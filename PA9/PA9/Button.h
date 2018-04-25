@@ -43,7 +43,7 @@ public:
 	}
 	void update() {
 		if (tweening) {
-			std::cout << "Tweening! " << size.x << "\n";
+			//std::cout << "Tweening! " << size.x << "\n";
 			int ms = clock.getElapsedTime().asMilliseconds();
 			if (ms >= DUR) {
 				ms = DUR;

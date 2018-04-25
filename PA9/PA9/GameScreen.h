@@ -57,9 +57,13 @@ public:
 		//Obstacle *testObstacle = new Obstacle(50, 250, 140, 100, "barricade1.png", 100);
 		Obstacle *testObstacles[NUM_OBST];
 		for (int i = 0; i < NUM_OBST; i++) {
-			testObstacles[i] = new Obstacle(100+200 * (float)i, 100 + 200 * (float)i, 140, 100, "barricade1.png", 100);
+			i % 2 == 0 ?
+				testObstacles[i] = new Obstacle(100 + 200 * (float)i, 150 + 10 * (float)i, 140, 100, "barricade1.png", 100)
+				:
+				testObstacles[i] = new Obstacle(50 + 20 * (float)i, 150 + 300 * (float)i, 140, 100, "barricade1.png", 100);
 		}
-		bool onBoundry = false, zombieOnBoundry = false;
+		int activeObstacles = NUM_OBST;
+		bool playerOnBoundry = false, zombieOnBoundry = false, projOnBoundry = false;
 		//int boundscount = 0;
 		sf::Vector2f playerFollowVector = *new sf::Vector2f(400, 300);
 		sf::View * followPlayerView = new sf::View(playerFollowVector,*new sf::Vector2f(800,600));
@@ -93,44 +97,44 @@ public:
 				timePoint = newTimePoint;
 			}
 
-			onBoundry = false;
+			playerOnBoundry = false;
 			//Handle Input
 			sf::Vector2f dir = { 0.0f, 0.0f };
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			{
-				for (int i = 0; i < NUM_OBST; i++) {
+				for (int i = 0; i < activeObstacles; i++) {
 					if (testObstacles[i]->playerOnBottomBound(player)) {
-						onBoundry = true;
+						playerOnBoundry = true;
 					}
 				}
-				onBoundry ? dir.y = 0.0f : dir.y -= 1.0f;
+				playerOnBoundry ? dir.y = 0.0f : dir.y -= 1.0f;
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 			{
-				for (int i = 0; i < NUM_OBST; i++) {
+				for (int i = 0; i < activeObstacles; i++) {
 					if (testObstacles[i]->playerOnTopBound(player)) {
-						onBoundry = true;
+						playerOnBoundry = true;
 					}
 				}
-				onBoundry ? dir.y = 0.0f : dir.y += 1.0f;
+				playerOnBoundry ? dir.y = 0.0f : dir.y += 1.0f;
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			{
-				for (int i = 0; i < NUM_OBST; i++) {
+				for (int i = 0; i < activeObstacles; i++) {
 					if (testObstacles[i]->playerOnRightBound(player)) {
-						onBoundry = true;
+						playerOnBoundry = true;
 					}
 				}
-				onBoundry ? dir.x = 0.0f : dir.x -= 1.0f;
+				playerOnBoundry ? dir.x = 0.0f : dir.x -= 1.0f;
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			{
-				for (int i = 0; i < NUM_OBST; i++) {
+				for (int i = 0; i < activeObstacles; i++) {
 					if (testObstacles[i]->playerOnLeftBound(player)) {
-						onBoundry = true;
+						playerOnBoundry = true;
 					}
 				}
-				onBoundry ? dir.x = 0.0f : dir.x += 1.0f;
+				playerOnBoundry ? dir.x = 0.0f : dir.x += 1.0f;
 			}
 
 			player.setDirection(dir);
@@ -153,8 +157,27 @@ public:
 			for (auto it = projectiles.begin(); it != projectiles.end();) {
 				auto & projectile = *it;
 				projectile.update();
+				projOnBoundry = false;
 
-				if (projectile.shouldBeDeleted(window.getView())) {
+				for (int i = 0; i < activeObstacles; i++) {
+					if (it->getPosition().x >= testObstacles[i]->getBounds().getPosition().x
+						&& it->getPosition().x <= testObstacles[i]->getBounds().getPosition().x + testObstacles[i]->getBounds().getSize().x
+						&& it->getPosition().y >= testObstacles[i]->getBounds().getPosition().y
+						&& it->getPosition().y <= testObstacles[i]->getBounds().getPosition().y + testObstacles[i]->getBounds().getSize().y) {
+						testObstacles[i]->changeHealth(-50);
+						projOnBoundry = true;
+						if (testObstacles[i]->getHealth() <= 0) {
+							delete testObstacles[i];
+							activeObstacles--;
+							for (int j = i; j < activeObstacles; j++) {
+								testObstacles[j] = testObstacles[j + 1];
+							}
+							testObstacles[activeObstacles] = nullptr;
+						}
+					}
+				}
+
+				if (projectile.shouldBeDeleted(window.getView()) || projOnBoundry) {
 					it = projectiles.erase(it);
 				}
 				else
@@ -180,7 +203,7 @@ public:
 					c->handleProjectiles(projectiles);
 					c->setDirection(direction);
 
-					for (int i = 0; i < NUM_OBST; i++) {
+					for (int i = 0; i < activeObstacles; i++) {
 						if (testObstacles[i]->playerOnTopBound(*c) && direction.y > 0) {
 							zombieOnBoundry = true;
 						}
@@ -225,7 +248,7 @@ public:
       
 			//testBackground->draw(window);
 			//testObstacle->draw(window);
-			for (int i = 0; i < NUM_OBST; i++) {
+			for (int i = 0; i < activeObstacles; i++) {
 				testObstacles[i]->draw(window);
 			}
 			// Draw the sprite
