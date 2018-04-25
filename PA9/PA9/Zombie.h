@@ -18,8 +18,55 @@ enum class AnimationIndex
 public:
 	Zombie() : Character(this->position)
 	{
-		this->zombieTexture.loadFromFile("zombiespritesheet.jpg");	
+		this->zombieTexture.loadFromFile("zombiespritesheet.jpg");
 		this->position = { static_cast<float>(rand() % 800), static_cast<float>(rand() % 600) };
+		this->sprite.setScale(1, 1);
+		this->sprite.setTextureRect({ 0, 0, 32, 32 });
+		this->sprite.setTexture(zombieTexture);
+		this->sprite.setOrigin({ 16, 16 });
+
+		this->animations[0].setAnimationFrames(1);
+
+		animations[int(AnimationIndex::WalkingUp)] = Animation(32, 96, 32, 32, "zombiespritesheet.jpg", 1);
+		animations[int(AnimationIndex::WalkingDown)] = Animation(32, 0, 32, 32, "zombiespritesheet.jpg", 1);
+		animations[int(AnimationIndex::WalkingLeft)] = Animation(32, 32, 32, 32, "zombiespritesheet.jpg", 1);
+		animations[int(AnimationIndex::WalkingRight)] = Animation(32, 64, 32, 32, "zombiespritesheet.jpg", 1);
+	}
+	
+	Zombie(sf::Vector2f safeAreaCenter) : Character(this->position)
+	{
+		this->zombieTexture.loadFromFile("zombiespritesheet.jpg");
+		sf::Vector2f spawnPoint;
+		int whichSide=0;
+		
+		do {
+			whichSide = rand() % 4;
+			switch (whichSide)
+			{
+			default:
+				spawnPoint.x = safeAreaCenter.x + static_cast<float>(rand() % 500);
+				spawnPoint.y = safeAreaCenter.y + static_cast<float>(rand() % 500);
+				break;														  
+			case 0:															  
+				spawnPoint.x = safeAreaCenter.x + static_cast<float>(rand() % 500);
+				spawnPoint.y = safeAreaCenter.y + static_cast<float>(rand() % 500);
+				break;														  
+			case 1:															  
+				spawnPoint.x = safeAreaCenter.x + static_cast<float>(rand() % 500);
+				spawnPoint.y = safeAreaCenter.y - static_cast<float>(rand() % 500);
+				break;														  
+			case 2:															  
+				spawnPoint.x = safeAreaCenter.x - static_cast<float>(rand() % 500);
+				spawnPoint.y = safeAreaCenter.y + static_cast<float>(rand() % 500);
+				break;														  
+			case 3:															  
+				spawnPoint.x = safeAreaCenter.x - static_cast<float>(rand() % 500);
+				spawnPoint.y = safeAreaCenter.y - static_cast<float>(rand() % 500);
+				break;
+			}
+		} while (abs(abs(spawnPoint.x) - abs(safeAreaCenter.x)) < 300 && abs(abs(spawnPoint.y) - abs(safeAreaCenter.y)) < 300);
+
+		this->position = spawnPoint;//= { static_cast<float>(rand() % 800), static_cast<float>(rand() % 600) };//Change -> safe area around player, spawn in area surrounding that
 		this->sprite.setScale(1,1);
 		this->sprite.setTextureRect({ 0, 0, 32, 32 });
 		this->sprite.setTexture(zombieTexture);	
@@ -82,12 +129,12 @@ public:
 		this->setHealth(-100);
 	}	
 
-	std::list<Character*> spawnWave(int waveCount)
+	std::list<Character*> spawnWave(int waveCount, Character & player)//pass in player pos
 	{
 		std::list<Character *> zombies;
 
 		for (int i = 0; i < waveCount; ++i) {
-			zombies.push_front(new Zombie());
+			zombies.push_front(new Zombie(player.getPosition()));//pass in player pos
 		}
 		return zombies;
 	}

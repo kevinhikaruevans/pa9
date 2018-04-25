@@ -37,7 +37,7 @@ public:
 		int curRound = 1;
 		
 		//List uses single Zombie object to spawn a new list of zombies
-		heapZombies = spawnZombie.spawnWave(25); //int represents # of zombies - can tie into set 2D array of rounds/count
+		heapZombies = spawnZombie.spawnWave(25,player); //int represents # of zombies - can tie into set 2D array of rounds/count
 		
 
 		//Background *testBackground = new Background(0, 0, 1920, 1080, "background.jpg");
@@ -266,7 +266,7 @@ public:
 			{
 				curRound++; //advance the round and spawn next wave
 				levelText.setString(sf::String("Level: " + std::to_string(curRound)));
-				heapZombies = spawnZombie.spawnWave(curRound * 20);
+				heapZombies = spawnZombie.spawnWave(curRound * 20, player);
 			}
 
 			float xOffset = followPlayerView->getCenter().x - 400

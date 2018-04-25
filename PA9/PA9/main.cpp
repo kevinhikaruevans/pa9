@@ -16,6 +16,8 @@ Group Names:
 
 int main()
 {
+	srand(time(NULL));
+
 	sf::RenderWindow window(sf::VideoMode(800, 600), "PA9");
 	window.setFramerateLimit(60);
 	window.setVerticalSyncEnabled(true);
