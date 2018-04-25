@@ -13,6 +13,8 @@
 #include "Cursor.h"
 #include <iostream>
 
+#define WINDOW_SCALE 0.39f
+
 class GameScreen
 	: public BaseScreen
 {
@@ -35,8 +37,9 @@ public:
 		}
 
 
-		Background *testBackground = new Background(0, 0, 800, 600, "overcast.jpg");
-		Obstacle *testObstacle = new Obstacle(50, 250, 140, 100, "barricade1.png", 100);
+		Background *testBackground = new Background(0, 0, 1920, 1080, "background.jpg");
+		testBackground->setScale(WINDOW_SCALE, WINDOW_SCALE, (*testBackground).getImage()); //resize background image - could pass in ref to window to scale dynamically
+		Obstacle *testObstacle = new Obstacle(50, 250, 140, 100, "barricade1.png", 100);		
 		int boundscount = 0;
 
 		//Timepoint for delta time measurement
@@ -150,7 +153,7 @@ public:
 			window.clear();
 			//Scenery - always draw before characters
 			testBackground->draw(window);
-			testObstacle->draw(window);
+			testObstacle->draw(window);			
 			// Draw the sprite
 			for (Character *c : zombies) {
 				c->draw(window);
