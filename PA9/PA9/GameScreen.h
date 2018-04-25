@@ -39,21 +39,36 @@ public:
 		heapZombies = spawnZombie.spawnWave(25); //int represents # of zombies - can tie into set 2D array of rounds/count
 		
 
-		Background *testBackground = new Background(0, 0, 1920, 1080, "background.jpg");
-		testBackground->setScale(WINDOW_SCALE, WINDOW_SCALE, (*testBackground).getImage()); //resize background image - could pass in ref to window to scale dynamically
+		//Background *testBackground = new Background(0, 0, 1920, 1080, "background.jpg");
+		//testBackground->setScale(WINDOW_SCALE, WINDOW_SCALE, (*testBackground).getImage()); //resize background image - could pass in ref to window to scale dynamically
+		Background *testBackgrounds[15];
+		for (int i = 0; i < 15; i++) {
+			if (i < 5) {
+				testBackgrounds[i] = new Background(1920 * (float)i, 0, 1920, 1080, "background.jpg");
+			}
+			else if (i < 10) {
+				testBackgrounds[i] = new Background(1920 * ((float)i-5), 1080, 1920, 1080, "background.jpg");
+			}
+			else {
+				testBackgrounds[i] = new Background(1920 * ((float)i-10), 1080*2, 1920, 1080, "background.jpg");
+			}
+		}
 		Obstacle *testObstacle = new Obstacle(50, 250, 140, 100, "barricade1.png", 100);		
-		int boundscount = 0;
+		//int boundscount = 0;
+		sf::Vector2f playerFollowVector = *new sf::Vector2f(400, 300);
+		sf::View * followPlayerView = new sf::View(playerFollowVector,*new sf::Vector2f(800,600));
 
 		//Timepoint for delta time measurement
 		auto timePoint = std::chrono::steady_clock::now();
 
 		while (window.isOpen()) {
+
 			// Process events
 			sf::Event event;
 			while (window.pollEvent(event))
 			{
 				if (event.type == sf::Event::MouseButtonPressed) {
-					sf::Vector2i target = { event.mouseButton.x, event.mouseButton.y };
+					sf::Vector2i target = { event.mouseButton.x + (int)window.getView().getCenter().x - 400, event.mouseButton.y + (int)window.getView().getCenter().y - 300 };
 					sf::Vector2f source = player.getPosition();
 					source.x += 10;
 					source.y += 10;
@@ -102,11 +117,25 @@ public:
 			player.setDirection(dir);
 			player.update(dt);
 
+
+			if (player.getPosition().x >= 400 && player.getPosition().x <= 9200) {
+				playerFollowVector.x = player.getPosition().x;
+			}
+			if (player.getPosition().y >= 300 && player.getPosition().y <= 2940) {
+				playerFollowVector.y = player.getPosition().y;
+			}
+
+			followPlayerView->setCenter(playerFollowVector);
+			window.setView(*followPlayerView);
+
+			/*std::cout << "P: " << player.getPosition().x << "," << player.getPosition().y << '\t' << "PFV: " 
+				<< playerFollowVector.x << "," << playerFollowVector.y << std::endl;*/
+
 			for (auto it = projectiles.begin(); it != projectiles.end();) {
 				auto & projectile = *it;
 				projectile.update();
 
-				if (projectile.shouldBeDeleted(window)) {
+				if (projectile.shouldBeDeleted(window.getView())) {
 					it = projectiles.erase(it);
 				}
 				else
@@ -163,20 +192,22 @@ public:
 
 			// Clear screen
 			window.clear();
+			for (int i = 0; i < 15; i++) {
+				testBackgrounds[i]->draw(window);
+			}
 			//Scenery - always draw before characters
-			testBackground->draw(window);
-			testObstacle->draw(window);			
+      
+			//testBackground->draw(window);
+			testObstacle->draw(window);
+			// Draw the sprite
+			for (Character *c : heapZombies) {
 
-			// draw zombies
-			for (Character *c : heapZombies)
-			{		
 				c->draw(window);
 			}
 			player.draw(window);
 			//enemy->draw(window);
 			// Update the window
 			newCursor.setPosition(window);
-
 
 			for (Projectile &p : projectiles) {
 				window.draw(p);
