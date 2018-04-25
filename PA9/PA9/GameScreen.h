@@ -18,25 +18,26 @@
 class GameScreen
 	: public BaseScreen
 {
-private:
-	std::list<Character *> enemies;
+	
 public:
 	GameScreen()
 		: BaseScreen("Game Screen")
 	{
 		m_Font.loadFromFile("OpenSans-Regular.ttf");
 	}
+
 	ScreenType run(sf::RenderWindow &window) {
-		//TODO: move these into private variables probs
 		Cursor newCursor(window);
 		Character player({ 100.0f, 100.0f });
 
 		std::list<Projectile> projectiles;
-
-		for (int i = 0; i < 25; ++i) {
-			enemies.push_front(new Zombie());
-		}
-
+		
+		//Wave Count
+		int curRound = 1;
+		
+		//List uses single Zombie object to spawn a new list of zombies
+		heapZombies = spawnZombie.spawnWave(25); //int represents # of zombies - can tie into set 2D array of rounds/count
+		
 
 		//Background *testBackground = new Background(0, 0, 1920, 1080, "background.jpg");
 		//testBackground->setScale(WINDOW_SCALE, WINDOW_SCALE, (*testBackground).getImage()); //resize background image - could pass in ref to window to scale dynamically
@@ -141,7 +142,7 @@ public:
 					it++;
 			}
 
-			for (auto it = enemies.begin(); it != enemies.end();) {
+			for (auto it = heapZombies.begin(); it != heapZombies.end();) {
 				Character *c = *it;
 				sf::Vector2f direction = (player.getPosition() - c->getPosition());
 
@@ -149,11 +150,11 @@ public:
 					// zombie attacked the player...
 					// player should probably take damage or something here.
 					delete c;
-					it = enemies.erase(it);
+					it = heapZombies.erase(it);
 				}
 				else if (c->getHealth() <= 0) {
 					delete c;
-					it = enemies.erase(it);
+					it = heapZombies.erase(it);
 				}
 				else {
 					c->handleProjectiles(projectiles);
@@ -181,19 +182,13 @@ public:
 			}
 
 			
-			//direction = (player.getPosition() - enemy->getPosition());
 
 
-			//enemy->setDirection(direction); //need different way to move towards character - position vector - get x,y?
-			//enemy->update(dt);
-
-			/*if (testObstacle->playerWithinBounds(player)) {
-			std::cout << "player within barrier" <<boundscount<< std::endl;
-			boundscount++;
-			std::cout << "O:" << testObstacle->getBounds().getPosition().x << "," << testObstacle->getBounds().getPosition().y << std::endl
-			<< "P:" << player.getPosition().x << "," << player.getPosition().y << std::endl;
-			}*/
-
+			if (heapZombies.empty()) //if all zombies die
+			{
+				curRound++; //advance the round and spawn next wave
+				heapZombies.merge(spawnZombie.spawnWave(curRound * 20));
+			}
 
 			// Clear screen
 			window.clear();
@@ -201,10 +196,12 @@ public:
 				testBackgrounds[i]->draw(window);
 			}
 			//Scenery - always draw before characters
+      
 			//testBackground->draw(window);
 			testObstacle->draw(window);
 			// Draw the sprite
-			for (Character *c : enemies) {
+			for (Character *c : heapZombies) {
+
 				c->draw(window);
 			}
 			player.draw(window);
@@ -223,5 +220,7 @@ public:
 
 private:
 	sf::Font m_Font;
+	std::list<Character*> heapZombies;
+	Zombie spawnZombie;
 
 };
