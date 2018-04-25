@@ -30,12 +30,24 @@ public:
 		Character player({ 100.0f, 100.0f });
 
 		std::list<Projectile> projectiles;
-		std::list<Character *> zombies;
+		/*std::list<Character *> zombies;
 
 		for (int i = 0; i < 25; ++i) {
 			zombies.push_front(new Zombie());
+		}*/
+		
+		int curRound = 1;
+		
+		
+		heapZombies = spawnZombie.spawnWave(25);
+		
+		if (heapZombies.empty())
+		{
+			curRound++;
+			heapZombies = spawnZombie.spawnWave(30);
 		}
 
+		
 
 		Background *testBackground = new Background(0, 0, 1920, 1080, "background.jpg");
 		testBackground->setScale(WINDOW_SCALE, WINDOW_SCALE, (*testBackground).getImage()); //resize background image - could pass in ref to window to scale dynamically
@@ -125,7 +137,7 @@ public:
 			std::cout << "O:" << testObstacle->getBounds().getPosition().x << "," << testObstacle->getBounds().getPosition().y << std::endl
 			<< "P:" << player.getPosition().x << "," << player.getPosition().y << std::endl;
 			}*/
-			for (Character *c : zombies)
+			for (Character *c : heapZombies)
 			{
 				direction = (player.getPosition() - c->getPosition());
 
@@ -155,7 +167,7 @@ public:
 			testBackground->draw(window);
 			testObstacle->draw(window);			
 			// Draw the sprite
-			for (Character *c : zombies) {
+			for (Character *c : heapZombies) {
 				c->draw(window);
 			}
 			player.draw(window);
@@ -175,5 +187,7 @@ public:
 
 private:
 	sf::Font m_Font;
+	std::list<Character*> heapZombies;
+	Zombie spawnZombie;
 
 };
