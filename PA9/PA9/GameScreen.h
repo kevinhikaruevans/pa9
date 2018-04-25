@@ -118,7 +118,12 @@ public:
 						playerOnBoundry = true;
 					}
 				}
+
 				playerOnBoundry ? dir.y = 0.0f : dir.y -= 1.0f;
+
+				if (player.getPosition().y <= 0) {
+					dir.y = 0.0f;
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 			{
@@ -128,6 +133,10 @@ public:
 					}
 				}
 				playerOnBoundry ? dir.y = 0.0f : dir.y += 1.0f;
+
+				if (player.getPosition().y >= 1080*3) {
+					dir.y = 0.0f;
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			{
@@ -137,6 +146,10 @@ public:
 					}
 				}
 				playerOnBoundry ? dir.x = 0.0f : dir.x -= 1.0f;
+			
+				if (player.getPosition().x <= 0) {
+					dir.x = 0.0f;
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			{
@@ -146,6 +159,10 @@ public:
 					}
 				}
 				playerOnBoundry ? dir.x = 0.0f : dir.x += 1.0f;
+
+				if (player.getPosition().x >= 1920*5) {
+					dir.x = 0.0f;
+				}
 			}
 
 			player.setDirection(dir);
