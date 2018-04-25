@@ -117,10 +117,10 @@ public:
 			player.update(dt);
 
 
-			if (player.getPosition().x >= 400) {
+			if (player.getPosition().x >= 400 && player.getPosition().x <= 9200) {
 				playerFollowVector.x = player.getPosition().x;
 			}
-			if (player.getPosition().y >= 300) {
+			if (player.getPosition().y >= 300 && player.getPosition().y <= 2940) {
 				playerFollowVector.y = player.getPosition().y;
 			}
 
