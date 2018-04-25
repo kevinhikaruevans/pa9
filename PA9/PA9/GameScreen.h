@@ -24,7 +24,7 @@ public:
 	GameScreen()
 		: BaseScreen("Game Screen")
 	{
-		m_Font.loadFromFile("OpenSans-Regular.ttf");
+		m_Font.loadFromFile("Creepster-Regular.ttf");
 	}
 
 	ScreenType run(sf::RenderWindow &window) {
@@ -67,9 +67,9 @@ public:
 		//int boundscount = 0;
 		sf::Vector2f playerFollowVector = *new sf::Vector2f(400, 300);
 		sf::View * followPlayerView = new sf::View(playerFollowVector,*new sf::Vector2f(800,600));
-		sf::Text levelText (sf::String("Level: " + std::to_string(curRound)), m_Font, 20);
-		levelText.setOutlineColor(sf::Color::White);
-		levelText.setOutlineThickness(1);
+		sf::Text levelText (sf::String("Level: " + std::to_string(curRound)), m_Font, 24);
+		levelText.setOutlineColor(sf::Color::Red);
+		levelText.setOutlineThickness(1.1);
 		levelText.setFillColor(sf::Color::Black);
 		levelText.setPosition({500, 500});
 
@@ -118,7 +118,12 @@ public:
 						playerOnBoundry = true;
 					}
 				}
+
 				playerOnBoundry ? dir.y = 0.0f : dir.y -= 1.0f;
+
+				if (player.getPosition().y <= 0) {
+					dir.y = 0.0f;
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 			{
@@ -128,6 +133,10 @@ public:
 					}
 				}
 				playerOnBoundry ? dir.y = 0.0f : dir.y += 1.0f;
+
+				if (player.getPosition().y >= 1080*3) {
+					dir.y = 0.0f;
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			{
@@ -137,6 +146,10 @@ public:
 					}
 				}
 				playerOnBoundry ? dir.x = 0.0f : dir.x -= 1.0f;
+			
+				if (player.getPosition().x <= 0) {
+					dir.x = 0.0f;
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			{
@@ -146,6 +159,10 @@ public:
 					}
 				}
 				playerOnBoundry ? dir.x = 0.0f : dir.x += 1.0f;
+
+				if (player.getPosition().x >= 1920*5) {
+					dir.x = 0.0f;
+				}
 			}
 
 			player.setDirection(dir);
