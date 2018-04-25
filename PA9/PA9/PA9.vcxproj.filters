@@ -74,6 +74,9 @@
     <ClInclude Include="Quad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DeathScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="OpenSans-Regular.ttf">

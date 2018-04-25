@@ -157,6 +157,7 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="BaseScreen.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="DeathScreen.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Quad.h" />
     <ClInclude Include="ScreenType.h" />

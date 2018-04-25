@@ -4,5 +4,6 @@ enum ScreenType {
 	Exit,
 	Title,
 	About,
-	Game
+	Game,
+	Death
 };
