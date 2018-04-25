@@ -18,6 +18,8 @@
 class GameScreen
 	: public BaseScreen
 {
+private:
+	std::list<Character *> enemies;
 public:
 	GameScreen()
 		: BaseScreen("Game Screen")
@@ -30,10 +32,9 @@ public:
 		Character player({ 100.0f, 100.0f });
 
 		std::list<Projectile> projectiles;
-		std::list<Character *> zombies;
 
 		for (int i = 0; i < 25; ++i) {
-			zombies.push_front(new Zombie());
+			enemies.push_front(new Zombie());
 		}
 
 
@@ -111,8 +112,46 @@ public:
 					it++;
 			}
 
+			for (auto it = enemies.begin(); it != enemies.end();) {
+				Character *c = *it;
+				sf::Vector2f direction = (player.getPosition() - c->getPosition());
 
-			sf::Vector2f direction = { 0.0f, 0.0f };
+				if (c->isTouchingCharacter(player)) {
+					// zombie attacked the player...
+					// player should probably take damage or something here.
+					delete c;
+					it = enemies.erase(it);
+				}
+				else if (c->getHealth() <= 0) {
+					delete c;
+					it = enemies.erase(it);
+				}
+				else {
+					c->handleProjectiles(projectiles);
+					c->setDirection(direction);
+
+					if (testObstacle->playerOnTopBound(*c) && direction.y > 0) {
+						c->update(0);
+					}
+					else if (testObstacle->playerOnLeftBound(*c) && direction.x > 0) {
+						c->update(0);
+					}
+					else if (testObstacle->playerOnBottomBound(*c) && direction.y < 0) {
+						c->update(0);
+					}
+					else if (testObstacle->playerOnRightBound(*c) && direction.x < 0) {
+						c->update(0);
+					}
+					else {
+						c->update(dt);
+					}
+
+					it++;
+				}
+
+			}
+
+			
 			//direction = (player.getPosition() - enemy->getPosition());
 
 
@@ -125,29 +164,7 @@ public:
 			std::cout << "O:" << testObstacle->getBounds().getPosition().x << "," << testObstacle->getBounds().getPosition().y << std::endl
 			<< "P:" << player.getPosition().x << "," << player.getPosition().y << std::endl;
 			}*/
-			for (Character *c : zombies)
-			{
-				direction = (player.getPosition() - c->getPosition());
 
-				c->setDirection(direction);
-
-				if (testObstacle->playerOnTopBound(*c) && direction.y > 0) {
-					c->update(0);
-				}
-				else if (testObstacle->playerOnLeftBound(*c) && direction.x > 0) {
-					c->update(0);
-				}
-				else if (testObstacle->playerOnBottomBound(*c) && direction.y < 0) {
-					c->update(0);
-				}
-				else if (testObstacle->playerOnRightBound(*c) && direction.x < 0) {
-					c->update(0);
-				}
-				else {
-					c->update(dt);
-				}
-
-			}
 
 			// Clear screen
 			window.clear();
@@ -155,7 +172,7 @@ public:
 			testBackground->draw(window);
 			testObstacle->draw(window);			
 			// Draw the sprite
-			for (Character *c : zombies) {
+			for (Character *c : enemies) {
 				c->draw(window);
 			}
 			player.draw(window);
