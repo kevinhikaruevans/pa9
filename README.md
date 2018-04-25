@@ -2,6 +2,13 @@
 
 The ninth PA. 
 
+## Authors
+
+Riley Chase (@NeutralIntel)
+Jonathan Kwon (@jonathan-aes)
+David Henshaw (@drahenshaw)
+Kevin Evans (@kevinhikaruevans)
+
 # Installation
 
 After cloning the project, you will need to follow these steps to install the dependencies:
