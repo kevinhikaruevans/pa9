@@ -68,6 +68,12 @@ public:
 		sf::Vector2f playerFollowVector = *new sf::Vector2f(400, 300);
 		sf::View * followPlayerView = new sf::View(playerFollowVector,*new sf::Vector2f(800,600));
 
+		sf::RectangleShape healthbg = *new sf::RectangleShape(*new sf::Vector2f(200, 25));
+		healthbg.setPosition(*new sf::Vector2f(500, 500));
+		healthbg.setFillColor(sf::Color::Black);
+		sf::RectangleShape healthBar = *new sf::RectangleShape(healthbg);
+		healthBar.setFillColor(sf::Color::Red);
+
 		//Timepoint for delta time measurement
 		auto timePoint = std::chrono::steady_clock::now();
 
@@ -192,6 +198,7 @@ public:
 				if (c->isTouchingCharacter(player)) {
 					// zombie attacked the player...
 					// player should probably take damage or something here.
+					player.takeDamage((float)10);
 					delete c;
 					it = heapZombies.erase(it);
 				}
@@ -239,6 +246,11 @@ public:
 				heapZombies = spawnZombie.spawnWave(curRound * 20);
 			}
 
+			healthbg.setPosition(500+followPlayerView->getCenter().x-400, 500+followPlayerView->getCenter().y-300);
+			healthBar.setPosition(500 + followPlayerView->getCenter().x - 400, 500 + followPlayerView->getCenter().y - 300);
+			healthBar.setSize(*new sf::Vector2f((float)200*player.getHealth()/MAX_HEALTH, 25));
+			
+
 			// Clear screen
 			window.clear();
 			for (int i = 0; i < 15; i++) {
@@ -257,6 +269,8 @@ public:
 				c->draw(window);
 			}
 			player.draw(window);
+			window.draw(healthbg);
+			window.draw(healthBar);
 			//enemy->draw(window);
 			// Update the window
 			newCursor.setPosition(window);
@@ -265,6 +279,11 @@ public:
 				window.draw(p);
 			}
 			window.display();
+
+			if (player.getHealth() <= 0) {
+				return Title;
+			}
+
 		}
 
 		return Title;
