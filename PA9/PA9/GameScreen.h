@@ -67,6 +67,11 @@ public:
 		//int boundscount = 0;
 		sf::Vector2f playerFollowVector = *new sf::Vector2f(400, 300);
 		sf::View * followPlayerView = new sf::View(playerFollowVector,*new sf::Vector2f(800,600));
+		sf::Text levelText (sf::String("Level: " + std::to_string(curRound)), m_Font, 20);
+		levelText.setOutlineColor(sf::Color::White);
+		levelText.setOutlineThickness(1);
+		levelText.setFillColor(sf::Color::Black);
+		levelText.setPosition({500, 500});
 
 		sf::RectangleShape healthbg = *new sf::RectangleShape(*new sf::Vector2f(200, 25));
 		healthbg.setPosition(*new sf::Vector2f(500, 500));
@@ -243,11 +248,15 @@ public:
 			if (heapZombies.empty()) //if all zombies die
 			{
 				curRound++; //advance the round and spawn next wave
+				levelText.setString(sf::String("Level: " + std::to_string(curRound)));
 				heapZombies = spawnZombie.spawnWave(curRound * 20);
 			}
 
-			healthbg.setPosition(500+followPlayerView->getCenter().x-400, 500+followPlayerView->getCenter().y-300);
-			healthBar.setPosition(500 + followPlayerView->getCenter().x - 400, 500 + followPlayerView->getCenter().y - 300);
+			float xOffset = followPlayerView->getCenter().x - 400
+				, yOffset = followPlayerView->getCenter().y - 300;
+			levelText.setPosition(500 + xOffset, 540 + yOffset);
+			healthbg.setPosition(500 + xOffset, 500 + yOffset);
+			healthBar.setPosition(500 + xOffset, 500 + yOffset);
 			healthBar.setSize(*new sf::Vector2f((float)200*player.getHealth()/MAX_HEALTH, 25));
 			
 
@@ -271,6 +280,7 @@ public:
 			player.draw(window);
 			window.draw(healthbg);
 			window.draw(healthBar);
+			window.draw(levelText);
 			//enemy->draw(window);
 			// Update the window
 			newCursor.setPosition(window);
@@ -281,7 +291,7 @@ public:
 			window.display();
 
 			if (player.getHealth() <= 0) {
-				return Title;
+				return Death;
 			}
 
 		}
