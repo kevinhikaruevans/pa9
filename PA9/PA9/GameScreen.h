@@ -118,7 +118,7 @@ public:
 					delete c;
 					it = zombies.erase(it);
 				}
-				if (c->getHealth() <= 0) {
+				else if (c->getHealth() <= 0) {
 					delete c;
 					it = zombies.erase(it);
 				}
