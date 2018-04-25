@@ -1,5 +1,6 @@
 #include "BaseScreen.h"
 #include "TitleScreen.h"
+#include "GameScreen.h"
 
 
 int main()

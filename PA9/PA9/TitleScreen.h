@@ -1,7 +1,6 @@
 #pragma once
 #include "AboutScreen.h"
-#include "BaseScreen.h"
-#include "GameScreen.h"
+#include "Button.h"
 //#include "State.h"
 
 #define MENU_SIZE 3
@@ -18,22 +17,39 @@ public:
 		: BaseScreen("Title Screen")
 	{
 		m_Font.loadFromFile("OpenSans-Regular.ttf");
+		m_TitleFont.loadFromFile("OpenSans-Bold.ttf");
+
 		m_SelectedMenuOption = 0;
-		m_TitleText = sf::Text("PA9", this->m_Font, 40U);
+		Button *b1 = createButton("Play");
+		Button *b2 = createButton("Instructions");
+		Button *b3 = createButton("Exit");
 
-		m_MenuOptions[0] = sf::Text("Play", this->m_Font, 30U);
-		m_MenuOptions[1] = sf::Text("About", this->m_Font, 30U);
-		m_MenuOptions[2] = sf::Text("Exit", this->m_Font, 30U);
+		for (int i = 0; i < layer1.size(); i++) {
+			Button * thing = (Button *) layer1[i];
+			thing->setPosition(25, 200 + 75 * i);
+			thing->setSize(300, 60);
+		}
 
-		m_MenuOptions[0].setPosition(10, 40);
-		m_MenuOptions[1].setPosition(10, 70);
-		m_MenuOptions[2].setPosition(10, 100);
+		Text *titleText = new sf::Text("INFECTION", this->m_TitleFont, 60U);
+		titleText->setPosition(25,100);
+		
+		layer1.push_back(titleText);
 	}
+
+	Button * createButton(std::string text) {
+		Button *b = new Button(text, this->m_Font);
+		b->setSize(sf::Vector2f(240, 80));
+		b->setPosition(sf::Vector2f(60, 60));
+		b->setBackgroundColor(sf::Color(255, 40, 51));
+		this->layer1.push_back(b);
+		return b;
+	}
+
 	ScreenType run(sf::RenderWindow &window) {
 		while (window.isOpen()) {
 			sf::Event e;
 			while (window.pollEvent(e)) {
-				if (e.type == sf::Event::KeyReleased) {
+				if (e.type == sf::Event::KeyPressed) {
 					switch (e.key.code) {
 					case sf::Keyboard::Up: {
 						if (m_SelectedMenuOption > 0)
@@ -70,87 +86,26 @@ public:
 			}
 
 			window.clear();
-			window.draw(this->m_TitleText);
-			// iterate through the whole menu array
-			for (int i = 0; i < MENU_SIZE; i++) {
-				sf::Text &menuOption = this->m_MenuOptions[i];
 
-				// highlight the selected option...
-				if (i == this->m_SelectedMenuOption)
-					menuOption.setFillColor(sf::Color::Red);
-				else
-					menuOption.setFillColor(sf::Color::White);
+			((Button *)layer1[m_SelectedMenuOption])->select();
 
-				window.draw(this->m_MenuOptions[i]);
+			for (int i = 0; i < 3; i++) {
+				if (i != m_SelectedMenuOption) {
+					((Button *)layer1[i])->deselect();
+				}
+				((Button *)layer1[i])->update();
 			}
 
+			for (std::vector<sf::Drawable *>::iterator i = layer1.begin(); i != layer1.end(); ++i) {
+				Drawable * thing = *i;
+				window.draw(*thing);
+			}
 			window.display();
 		}
 	}
-	/*
-	void handleEvents(sf::Event e, sf::RenderWindow &window) {
-		if (e.type == sf::Event::KeyReleased) {
-			switch (e.key.code) {
-				case sf::Keyboard::Up: {
-					if (m_SelectedMenuOption > 0)
-						m_SelectedMenuOption--;
-					else
-						m_SelectedMenuOption = MENU_SIZE - 1;
-
-					break;
-				}
-				case sf::Keyboard::Down: {
-					if (m_SelectedMenuOption < MENU_SIZE - 1)
-						m_SelectedMenuOption++;
-					else
-						m_SelectedMenuOption = 0;
-					break;
-				}
-
-				case sf::Keyboard::Return: {
-					switch (m_SelectedMenuOption) {
-						case MENU_OPTION_PLAY:
-							// TODO
-							state.setCurrentScreen(new GameScreen());
-							break;
-						case MENU_OPTION_ABOUT:
-							// update the screen to be a new instance of the AboutScreen
-							return;
-							break;
-						case MENU_OPTION_EXIT:
-							// just exit out for this option
-							window.close();
-							break;
-					}
-					break;
-				}
-			}
-		}
-	}
-
-	/*
-	Draws the text onto the window
-	void draw(sf::RenderWindow &window) {
-		window.draw(this->m_TitleText);
-
-		// iterate through the whole menu array
-		for (int i = 0; i < MENU_SIZE; i++) {
-			sf::Text &menuOption = this->m_MenuOptions[i];
-
-			// highlight the selected option...
-			if (i == this->m_SelectedMenuOption)
-				menuOption.setFillColor(sf::Color::Red);
-			else
-				menuOption.setFillColor(sf::Color::White);
-
-			window.draw(this->m_MenuOptions[i]);
-		}
-	}
-	*/
 private:
 	sf::Font m_Font;
-
-	sf::Text m_TitleText;
+	sf::Font m_TitleFont;
 
 	sf::Text m_MenuOptions[MENU_SIZE];
 

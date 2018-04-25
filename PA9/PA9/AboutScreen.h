@@ -18,7 +18,7 @@ public:
 		m_Font.loadFromFile("OpenSans-Regular.ttf");
 		Text *buffer;
 
-		buffer = new sf::Text("How to play the game\nPress ENTER to return to the menu\n", this->m_Font, 24U);
+		buffer = new sf::Text("How to play the game\nWASD to move\nClick to shoot\n\nPress ENTER to return to the menu\n", this->m_Font, 24U);
 		buffer->setPosition(10, 50);
 		elements.push_back(buffer);
 	}
@@ -26,6 +26,7 @@ public:
 	ScreenType run(sf::RenderWindow &window) {
 		while (window.isOpen()) {
 			sf::Event e;
+			int ret = 0;
 			while (window.pollEvent(e)) {
 				if (e.type == sf::Event::KeyPressed) {
 					if (e.key.code == sf::Keyboard::Return) {
@@ -42,6 +43,7 @@ public:
 	}
 private:
 	sf::Font m_Font;
+	sf::Font m_TitleFont;
 	Text m_Title;
 	Text m_Description;
 	vector<Drawable *> elements;	
