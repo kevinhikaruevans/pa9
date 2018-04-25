@@ -21,6 +21,9 @@
     <ClCompile Include="BaseScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Quad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -65,9 +68,18 @@
     <ClInclude Include="Projectile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Quad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="OpenSans-Regular.ttf">
+      <Filter>Resource Files</Filter>
+    </Font>
+    <Font Include="OpenSans-Bold.ttf">
       <Filter>Resource Files</Filter>
     </Font>
   </ItemGroup>

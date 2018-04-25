@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClCompile Include="BaseScreen.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Quad.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -155,7 +156,9 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="BaseScreen.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="Quad.h" />
     <ClInclude Include="ScreenType.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Cursor.h" />
@@ -166,6 +169,7 @@
     <ClInclude Include="Zombie.h" />
   </ItemGroup>
   <ItemGroup>
+    <Font Include="OpenSans-Bold.ttf" />
     <Font Include="OpenSans-Regular.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
