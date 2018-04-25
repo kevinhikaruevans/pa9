@@ -36,14 +36,15 @@ public:
 			zombies.push_front(new Zombie());
 		}*/
 		
+		//Wave Count
 		int curRound = 1;
 		
+		//List uses single Zombie object to spawn a new list of zombies
+		heapZombies = spawnZombie.spawnWave(25); //int represents # of zombies - can tie into set 2D array of rounds/count
 		
-		heapZombies = spawnZombie.spawnWave(25);
-		
-		if (heapZombies.empty())
+		if (heapZombies.empty()) //if all zombies die
 		{
-			curRound++;
+			curRound++; //advance the round and spawn next wave
 			heapZombies = spawnZombie.spawnWave(30);
 		}
 
