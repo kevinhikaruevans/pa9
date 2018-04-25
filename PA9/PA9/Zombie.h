@@ -79,7 +79,7 @@ public:
 	
 	void takeDamage()
 	{
-		
+		this->setHealth(-100);
 	}	
 
 	std::list<Character*> spawnWave(int waveCount)

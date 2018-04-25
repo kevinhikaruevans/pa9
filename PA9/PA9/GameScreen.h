@@ -18,6 +18,7 @@
 class GameScreen
 	: public BaseScreen
 {
+	
 public:
 	GameScreen()
 		: BaseScreen("Game Screen")
@@ -30,9 +31,15 @@ public:
 		Character player({ 100.0f, 100.0f });
 
 		std::list<Projectile> projectiles;
+//<<<<<<< HEAD
 		/*std::list<Character *> zombies;
+||||||| merged common ancestors
+		std::list<Character *> zombies;
+=======
+>>>>>>> origin/master
 
 		for (int i = 0; i < 25; ++i) {
+<<<<<<< HEAD
 			zombies.push_front(new Zombie());
 		}*/
 		
@@ -46,6 +53,10 @@ public:
 		{
 			curRound++; //advance the round and spawn next wave
 			heapZombies = spawnZombie.spawnWave(30);
+//||||||| merged common ancestors
+			heapZombies.push_front(new Zombie());
+//=======			
+//>>>>>>> origin/master
 		}
 
 		
@@ -124,8 +135,46 @@ public:
 					it++;
 			}
 
+			for (auto it = heapZombies.begin(); it != heapZombies.end();) {
+				Character *c = *it;
+				sf::Vector2f direction = (player.getPosition() - c->getPosition());
 
-			sf::Vector2f direction = { 0.0f, 0.0f };
+				if (c->isTouchingCharacter(player)) {
+					// zombie attacked the player...
+					// player should probably take damage or something here.
+					delete c;
+					it = heapZombies.erase(it);
+				}
+				else if (c->getHealth() <= 0) {
+					delete c;
+					it = heapZombies.erase(it);
+				}
+				else {
+					c->handleProjectiles(projectiles);
+					c->setDirection(direction);
+
+					if (testObstacle->playerOnTopBound(*c) && direction.y > 0) {
+						c->update(0);
+					}
+					else if (testObstacle->playerOnLeftBound(*c) && direction.x > 0) {
+						c->update(0);
+					}
+					else if (testObstacle->playerOnBottomBound(*c) && direction.y < 0) {
+						c->update(0);
+					}
+					else if (testObstacle->playerOnRightBound(*c) && direction.x < 0) {
+						c->update(0);
+					}
+					else {
+						c->update(dt);
+					}
+
+					it++;
+				}
+
+			}
+
+			
 			//direction = (player.getPosition() - enemy->getPosition());
 
 
@@ -138,7 +187,11 @@ public:
 			std::cout << "O:" << testObstacle->getBounds().getPosition().x << "," << testObstacle->getBounds().getPosition().y << std::endl
 			<< "P:" << player.getPosition().x << "," << player.getPosition().y << std::endl;
 			}*/
-			for (Character *c : heapZombies)
+//<<<<<<< HEAD
+
+			///ZombieWave Merge Conflict - Should be handled by above loop?
+
+			/*for (Character *c : heapZombies)
 			{
 				direction = (player.getPosition() - c->getPosition());
 
@@ -159,8 +212,12 @@ public:
 				else {
 					c->update(dt);
 				}
+			}*/
 
-			}
+		   ///***************************************************************************
+//=======
+//>>>>>>> origin/master
+
 
 			// Clear screen
 			window.clear();
@@ -168,7 +225,9 @@ public:
 			testBackground->draw(window);
 			testObstacle->draw(window);			
 			// Draw the sprite
-			for (Character *c : heapZombies) {
+//<<<<<<< HEAD
+			for (Character *c : heapZombies)
+			{		
 				c->draw(window);
 			}
 			player.draw(window);
